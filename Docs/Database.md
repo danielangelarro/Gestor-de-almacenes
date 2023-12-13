@@ -103,7 +103,7 @@ CREATE TABLE Salidas (
 
 ```
 
-## Tranascciones
+## Transacciones
 
 Aquí están algunas de las transacciones SQL que se necesitan para el funcionamiento del sistema de gestión de almacenes:
 
