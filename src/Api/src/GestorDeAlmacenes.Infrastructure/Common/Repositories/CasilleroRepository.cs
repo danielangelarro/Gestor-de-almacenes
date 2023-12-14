@@ -30,7 +30,12 @@ namespace GestorDeAlmacenes.Infrastructure.Repositories
            return await _context.Casilleros.ToListAsync();
        }
 
-       public async Task<Casillero> GetCasilleroByIdAsync(Guid id)
+        public async Task<IEnumerable<Casillero>> GetAllCasillerosByIdAsync(ICollection<Guid> guids)
+        {
+            return await _context.Casilleros.Where(c => guids.Contains(c.ID_Casillero)).ToListAsync();
+        }
+
+        public async Task<Casillero> GetCasilleroByIdAsync(Guid id)
        {
            return await _context.Casilleros.FindAsync(id);
        }
