@@ -28,7 +28,7 @@ Cada uno de estos procesos se puede dividir en subprocesos más pequeños según
 | Gestión de Productos | ✅ CrearProducto <br> ✅ ActualizarProducto <br> ✅ EliminarProducto | ✅ ObtenerProducto <br> ✅ ObtenerTodosProductos |
 | Gestión de Casilleros | ✅ CrearCasillero <br> ✅ ActualizarCasillero <br> ✅ EliminarCasillero | ✅ ObtenerCasillero <br> ✅ ObtenerTodosCasilleros <br> ✅ ObtenerTodosCasillerosPorRack |
 | Gestión de Racks | ✅ CrearRack <br> ✅ ActualizarRack <br> ✅ EliminarRack | ✅ ObtenerRack <br> ✅ ObtenerTodosRacks |
-| Gestión de Proveedores y Clientes | ✅ CrearProveedor <br> ✅ ActualizarProveedor <br> ✅ EliminarProveedor <br> ❌ CrearCliente <br> ❌ ActualizarCliente <br> ❌ EliminarCliente | ✅ ObtenerProveedor <br> ✅ ObtenerTodosProveedores <br> ❌ ObtenerCliente <br> ❌ ObtenerTodosClientes |
+| Gestión de Proveedores y Clientes | ✅ CrearProveedor <br> ✅ ActualizarProveedor <br> ✅ EliminarProveedor <br> ✅ CrearCliente <br> ✅ ActualizarCliente <br> ✅ EliminarCliente | ✅ ObtenerProveedor <br> ✅ ObtenerTodosProveedores <br> ✅ ObtenerCliente <br> ✅ ObtenerTodosClientes |
 | Gestión de Entradas y Salidas de Productos | ❌ RegistrarEntradaProducto <br> ❌ RegistrarSalidaProducto | ❌ ObtenerEntradaProducto <br> ❌ ObtenerSalidaProducto <br> ❌ ObtenerTodasEntradaProducto <br> ❌ ObtenerTodasSalidaProducto <br> ❌ HistorialEntradasSalidas |
 | Gestión de Mermas | ✅ RegistrarMerma | ✅ ObtenerMerma <br> ✅ ObtenerTodasMermas |
 | Gestión de Usuarios | ❌ CrearUsuario <br> ❌ ActualizarUsuario <br> ❌ EliminarUsuario | ❌ ObtenerUsuario <br> ❌ ObtenerTodosUsuarios |
