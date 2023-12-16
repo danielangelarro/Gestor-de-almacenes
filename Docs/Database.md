@@ -4,6 +4,8 @@
 
 Crear una aplicacion que permitan registrar entradas y salidas de productos. Cuando un producto entra se reserva una ubicacion que corresponde a un casillero en un rack determinado. Cada rack contiene casilleros. Cada producto tiene un nombre, descripcion, precio total y precio individual por producto, cantidad, tipo, dimensiones y peso , fecha de llegada y fecha de caducidad. Cada casilla contiene un area determinadaa y un peso máximo que soporta. Cada producto es enviado por un proveedor y es comprado por un cliente. De cada uno se conoce su nombre, carnet de identidad, numero de telefono, correo y dirección. Cuando un producto caduce pasa a ser una merma. En cada momento se desea saber la cantidad de dinero perdido en mermas, las ganancias mensuales, anuales y semanales. La cantidad de productos en stock actualmente. Que usuario autorizó la entrada y salida de productos respectivamente. Los usuarios se clasifican en administradores y almaceneros. Ademas se desea saber la ubicacion de cada producto en stock. los racks se ubican por pasillos. Se pueden destinar una serie de casillas para almacenar un tipo de productos específicos. Crea las tablas que modelen los datos anteriores.
 
+
+
 ## Base de datos
 
 ```sql
@@ -103,7 +105,7 @@ CREATE TABLE Salidas (
 
 ```
 
-## Tranascciones
+## Transacciones
 
 Aquí están algunas de las transacciones SQL que se necesitan para el funcionamiento del sistema de gestión de almacenes:
 
@@ -169,3 +171,4 @@ SELECT ID_Casillero
 FROM Ubicaciones
 WHERE ID_Producto = ?;
 ```
+

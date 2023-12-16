@@ -27,7 +27,7 @@ namespace GestorDeAlmacenes.Infrastructure.Repositories
        await _context.SaveChangesAsync();
    }
 
-   public async Task<IEnumerable<Producto>> GetAllProductosAsync()
+   public async Task<List<Producto>> GetAllProductosAsync()
    {
        return await _context.Productos.ToListAsync();
    }

@@ -45,9 +45,9 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<A
         }
 
         var user = new User {
-            FirstName = command.FirstName,
-            LastName = command.LastName,
-            Email = command.Email,
+            Nombres = command.FirstName,
+            Apellidos = command.LastName,
+            Correo = command.Email,
             Password = _passwordService.HashPassword(command.Password)
         };
 
