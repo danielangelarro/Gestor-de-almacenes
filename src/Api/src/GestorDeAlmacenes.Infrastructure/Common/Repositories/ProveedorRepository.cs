@@ -25,7 +25,7 @@ public class ProveedorRepository : IProveedorRepository
        await _context.SaveChangesAsync();
    }
 
-   public async Task<IEnumerable<Proveedor>> GetAllProveedoresAsync()
+   public async Task<ICollection<Proveedor>> GetAllProveedoresAsync()
    {
        return await _context.Proveedores.ToListAsync();
    }

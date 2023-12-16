@@ -27,7 +27,7 @@ namespace GestorDeAlmacenes.Infrastructure.Repositories
           await _context.SaveChangesAsync();
       }
 
-      public async Task<IEnumerable<Cliente>> GetAllClientesAsync()
+      public async Task<ICollection<Cliente>> GetAllClientesAsync()
       {
           return await _context.Clientes.ToListAsync();
       }
