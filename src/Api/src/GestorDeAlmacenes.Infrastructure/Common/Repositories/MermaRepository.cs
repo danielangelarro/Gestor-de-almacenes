@@ -27,7 +27,7 @@ namespace GestorDeAlmacenes.Infrastructure.Repositories
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Merma>> GetAllMermasAsync()
+    public async Task<ICollection<Merma>> GetAllMermasAsync()
     {
         return await _context.Mermas.ToListAsync();
     }
