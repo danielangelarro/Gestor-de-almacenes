@@ -35,6 +35,11 @@ namespace GestorDeAlmacenes.Infrastructure.Repositories
             return await _context.Casilleros.Where(c => guids.Contains(c.ID_Casillero)).ToListAsync();
         }
 
+        public async Task<ICollection<Casillero>> GetAllCasillerosByRackIdAsync(Guid rack)
+        {
+            return await _context.Casilleros.Where(c => c.ID_Rack == rack).ToListAsync();
+        }
+
         public async Task<Casillero> GetCasilleroByIdAsync(Guid id)
        {
            return await _context.Casilleros.FindAsync(id);
