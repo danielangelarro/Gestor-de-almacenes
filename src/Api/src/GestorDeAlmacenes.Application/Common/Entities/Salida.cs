@@ -2,7 +2,7 @@ using GestorDeAlmacenes.Domain.Entities;
 
 namespace GestorDeAlmacenes.Application.Entities;
 
-public class Salida
+public class Salida : ITransaction
 {
    public Guid ID_Salida { get; set; }
    public Guid ID_Producto { get; set; }

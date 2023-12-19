@@ -25,12 +25,12 @@ public class SalidaRepository : ISalidaRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Salida>> GetAllSalidasAsync()
+    public async Task<ICollection<Salida>> GetAllSalidasAsync()
     {
         return await _context.Salidas.ToListAsync();
     }
 
-    public async Task<Salida> GetSalidaByIdAsync(int id)
+    public async Task<Salida> GetSalidaByIdAsync(Guid id)
     {
         return await _context.Salidas.FindAsync(id);
     }
