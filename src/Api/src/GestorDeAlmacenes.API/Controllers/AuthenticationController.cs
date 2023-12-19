@@ -53,10 +53,10 @@ public class AuthenticationController : ApiController
     private static AuthenticationResponse MapAuthResult(AuthenticationResult authResult)
     {
         return new AuthenticationResponse(
-            authResult.user.Id,
-            authResult.user.FirstName,
-            authResult.user.LastName,
-            authResult.user.Email,
+            authResult.user.ID_User,
+            authResult.user.Nombres,
+            authResult.user.Apellidos,
+            authResult.user.Correo,
             authResult.Token
         );
     }
