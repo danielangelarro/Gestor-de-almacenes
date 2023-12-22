@@ -2,7 +2,7 @@ using System;
 
 namespace GestorDeAlmacenes.Application.DTO.Mermas
 {
-    public record MermaUpdateRequest(
+    public record MermaUploadRequest(
         Guid ID_Merma,
         Guid ID_Producto,
         int Cantidad,
