@@ -1,5 +1,6 @@
 using GestorDeAlmacenes.Application.Common.Interfaces;
 using GestorDeAlmacenes.Application.Entities;
+using GestorDeAlmacenes.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -27,9 +28,9 @@ namespace GestorDeAlmacenes.Infrastructure.Repositories
          await _context.SaveChangesAsync();
      }
 
-     public async Task<ICollection<Entrada>> GetAllEntradasAsync()
+     public async Task<ICollection<ITransaction>> GetAllEntradasAsync()
      {
-         return await _context.Entradas.ToListAsync();
+         return await (_context.Entradas).Select(e => (ITransaction)e ).ToListAsync();
      }
 
      public async Task<Entrada> GetEntradaByIdAsync(Guid id)
