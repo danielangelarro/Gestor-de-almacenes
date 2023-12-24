@@ -4,7 +4,6 @@ using System;
 namespace GestorDeAlmacenes.Application.DTO.Product
 {
     public record ProductUploadRequest(
-        Guid ID_Producto,
         string Nombre,
         string Descripcion,
         float Precio_Total,
