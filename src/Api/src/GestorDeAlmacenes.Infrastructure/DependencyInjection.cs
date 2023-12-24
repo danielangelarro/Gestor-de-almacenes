@@ -2,6 +2,7 @@ using GestorDeAlmacenes.Application.Common.Interfaces;
 using GestorDeAlmacenes.Application.Common.Interfaces.Authentication;
 using GestorDeAlmacenes.Application.Common.Interfaces.Repository;
 using GestorDeAlmacenes.Application.Common.Interfaces.Services;
+using GestorDeAlmacenes.Application.Entities;
 using GestorDeAlmacenes.Infrastructure.Authentication;
 using GestorDeAlmacenes.Infrastructure.Repositories;
 using GestorDeAlmacenes.Infrastructure.Services;
@@ -28,8 +29,17 @@ public static class DependencyInjection
         services.AddSingleton<IJwtTokenGenerator, JwTokenGenerator>();
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
-        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ICasilleroRepository, CasilleroRepository>();
+        services.AddScoped<IClienteRepository, ClienteRepository>();
+        services.AddScoped<IEntradaRepository, EntradaRepository>();
+        services.AddScoped<IMermaRepository, MermaRepository>();
         services.AddScoped<IPhotoRepository, PhotoRepository>();
+        services.AddScoped<IProductoRepository, ProductoRepository>();
+        services.AddScoped<IProveedorRepository, ProveedorRepository>();
+        services.AddScoped<IRackRepository, RackRepository>();
+        services.AddScoped<ISalidaRepository, SalidaRepository>();
+        services.AddScoped<IUbicacionRepository, UbicacionRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
 
         return services;
     }

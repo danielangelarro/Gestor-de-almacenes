@@ -78,7 +78,7 @@ public class CasilleroController : ApiController
         );
     }
     
-    [HttpPost]
+    [HttpPost("add")]
     public async Task<IActionResult> AddCasillero(CasilleroUploadRequest request)
     {
         var query = new AddCasilleroCommands(

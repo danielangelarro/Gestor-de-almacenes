@@ -28,7 +28,7 @@ public class EntradaAndSalidaController : ApiController
         _mediator = mediator;
     }
 
-    [HttpGet]
+    [HttpGet("entrada")]
     public async Task<IActionResult> GetEntradas()
     {
         var query = new GetAllEntradasQuery();
@@ -41,7 +41,7 @@ public class EntradaAndSalidaController : ApiController
         );
     }
     
-    [HttpGet]
+    [HttpGet("salida")]
     public async Task<IActionResult> GetSalidas()
     {
         var query = new GetAllSalidasQuery();
@@ -54,7 +54,7 @@ public class EntradaAndSalidaController : ApiController
         );
     }
     
-    [HttpGet]
+    [HttpGet("history")]
     public async Task<IActionResult> GetEntradaAndSalidas()
     {
         var query = new GetAllEntradaAndSalidasQuery();
@@ -67,7 +67,7 @@ public class EntradaAndSalidaController : ApiController
         );
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("entrada/{id}")]
     public async Task<IActionResult> GetEntradaById(Guid id)
     {
         var query = new GetEntradaByIdQuery(id);
@@ -80,7 +80,7 @@ public class EntradaAndSalidaController : ApiController
         );
     }
     
-    [HttpGet("{id}")]
+    [HttpGet("salida/{id}")]
     public async Task<IActionResult> GetSalidaById(Guid id)
     {
         var query = new GetSalidaByIdQuery(id);
@@ -93,7 +93,7 @@ public class EntradaAndSalidaController : ApiController
         );
     }
     
-    [HttpPost]
+    [HttpPost("entrada/add")]
     public async Task<IActionResult> AddEntrada(UploadEntradaRequest request)
     {
         var query = new AddEntradaCommands(
@@ -111,7 +111,7 @@ public class EntradaAndSalidaController : ApiController
         );
     }
     
-    [HttpPost]
+    [HttpPost("salida/add")]
     public async Task<IActionResult> AddSalida(UploadEntradaRequest request)
     {
         var query = new AddSalidaCommands(

@@ -25,7 +25,7 @@ public class RackRepository : IRackRepository
        await _context.SaveChangesAsync();
    }
 
-   public async Task<IEnumerable<Rack>> GetAllRacksAsync()
+   public async Task<ICollection<Rack>> GetAllRacksAsync()
    {
        return await _context.Racks.ToListAsync();
    }
