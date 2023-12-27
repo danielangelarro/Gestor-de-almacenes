@@ -7,10 +7,28 @@ using GestorDeAlmacenes.Infrastructure.Authentication;
 using GestorDeAlmacenes.Infrastructure.Repositories;
 using GestorDeAlmacenes.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace GestorDeAlmacenes.Infrastructure;
+
+
+public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<GestorDeAlmacenesDBContext>
+{
+    public GestorDeAlmacenesDBContext CreateDbContext(string[] args)
+    {
+        IConfigurationRoot configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile(@Directory.GetCurrentDirectory() + "/../GestorDeAlmacenes.API/appsettings.Development.json")
+            .Build();
+        var builder = new DbContextOptionsBuilder<GestorDeAlmacenesDBContext>();
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        builder.UseNpgsql(connectionString);
+        return new GestorDeAlmacenesDBContext(builder.Options);
+    }
+}
+
 
 public static class DependencyInjection
 {

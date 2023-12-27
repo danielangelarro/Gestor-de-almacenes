@@ -1,9 +1,11 @@
+using System.ComponentModel.DataAnnotations;
 using GestorDeAlmacenes.Domain.Entities;
 
 namespace GestorDeAlmacenes.Application.Entities;
 
 public class Producto
 {
+   [Key]
    public Guid ID_Producto { get; set; }
    public string Nombre { get; set; }
    public string Descripcion { get; set; }

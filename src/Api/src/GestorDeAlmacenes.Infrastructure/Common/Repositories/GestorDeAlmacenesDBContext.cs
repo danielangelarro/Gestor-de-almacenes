@@ -9,6 +9,18 @@ public class GestorDeAlmacenesDBContext : DbContext
     {
     }
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Entrada>()
+            .HasKey(e => new { e.ID_Entrada, e.ID_Producto, e.ID_Usuario });
+        
+        modelBuilder.Entity<Salida>()
+            .HasKey(s => new { s.ID_Salida, s.ID_Producto, s.ID_Usuario });
+        
+        modelBuilder.Entity<Ubicacion>()
+            .HasKey(u => new { u.ID_Producto, u.ID_Casillero });
+    }
+
     public DbSet<User> Users {get; set; }
     public DbSet<Photo> Photos {get; set; }
     public DbSet<Producto> Productos { get; set; }

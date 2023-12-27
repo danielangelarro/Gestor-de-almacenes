@@ -1,9 +1,11 @@
+using System.ComponentModel.DataAnnotations;
 using GestorDeAlmacenes.Domain.Entities;
 
 namespace GestorDeAlmacenes.Application.Entities;
 
 public class Proveedor : IUser
 {
+   [Key]
    public Guid ID_Proveedor { get; set; }
    public string? Nombres { get; set; }
    public string? Apellidos { get; set; }

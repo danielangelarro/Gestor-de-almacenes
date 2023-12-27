@@ -252,5 +252,3 @@ END //
 DELIMITER ;
 
 ```
-
-Trabajo de Control II: Teor´ıa del Dise˜no

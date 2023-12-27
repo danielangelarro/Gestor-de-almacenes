@@ -1,9 +1,11 @@
+using System.ComponentModel.DataAnnotations;
 using GestorDeAlmacenes.Domain.Entities;
 
 namespace GestorDeAlmacenes.Application.Entities;
 
 public class Casillero
 {
+   [Key]
    public Guid ID_Casillero { get; set; }
    public Guid ID_Rack { get; set; }
    public float Area { get; set; }

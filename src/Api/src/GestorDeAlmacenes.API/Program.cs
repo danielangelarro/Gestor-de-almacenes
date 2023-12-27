@@ -11,12 +11,27 @@ var builder = WebApplication.CreateBuilder(args);
 
         .ConfigureAutheticationServices(builder.Configuration)
         .SwaggerDocumentatiobService();
+    
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("MyPolicy",
+            builder =>
+            {
+                builder.WithOrigins("http://localhost:8080")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .SetIsOriginAllowed(origin => true)
+                        .AllowCredentials();
+            });
+    });
 
     builder.Services.AddControllers();
 }
 
 var app = builder.Build();
 {
+    app.UseCors("MyPolicy");
+
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
