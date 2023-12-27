@@ -12,34 +12,9 @@
         </sidenav-collapse>
       </li>
       <li class="nav-item">
-        <sidenav-collapse navText="Tables" :to="{ name: 'Tables' }">
+        <sidenav-collapse navText="Inventario" :to="{ name: 'Tables' }">
           <template #icon>
             <office />
-          </template>
-        </sidenav-collapse>
-      </li>
-      <li class="nav-item">
-        <sidenav-collapse navText="Billing" :to="{ name: 'Billing' }">
-          <template #icon>
-            <credit-card />
-          </template>
-        </sidenav-collapse>
-      </li>
-
-      <li class="nav-item">
-        <sidenav-collapse
-          navText="Virtual Reality"
-          :to="{ name: 'Virtual Reality' }"
-        >
-          <template #icon>
-            <box3d />
-          </template>
-        </sidenav-collapse>
-      </li>
-      <li class="nav-item">
-        <sidenav-collapse navText="RTL" :to="{ name: 'Rtl' }">
-          <template #icon>
-            <settings />
           </template>
         </sidenav-collapse>
       </li>
@@ -75,33 +50,21 @@
     </ul>
   </div>
   <div class="pt-3 mx-3 mt-3 sidenav-footer">
-    <sidenav-card
-      :class="cardBg"
-      textPrimary="Need Help?"
-      textSecondary="Please check our docs"
-      route="https://www.creative-tim.com/learning-lab/vue/overview/soft-ui-dashboard/"
-      label="Documentation"
-      icon="ni ni-diamond"
-    />
     <a
       class="btn bg-gradient-success mt-4 w-100"
-      href="https://www.creative-tim.com/product/vue-soft-ui-dashboard-pro?ref=vsud"
+      href="#"
       type="button"
-      >Upgrade to pro</a
+      >Soporte técnico</a
     >
   </div>
 </template>
 <script>
 import SidenavCollapse from "./SidenavCollapse.vue";
-import SidenavCard from "./SidenavCard.vue";
 import Shop from "../../components/Icon/Shop.vue";
 import Office from "../../components/Icon/Office.vue";
-import CreditCard from "../../components/Icon/CreditCard.vue";
-import Box3d from "../../components/Icon/Box3d.vue";
 import CustomerSupport from "../../components/Icon/CustomerSupport.vue";
 import Document from "../../components/Icon/Document.vue";
 import Spaceship from "../../components/Icon/Spaceship.vue";
-import Settings from "../../components/Icon/Settings.vue";
 
 export default {
   name: "SidenavList",
@@ -110,22 +73,18 @@ export default {
   },
   data() {
     return {
-      title: "Soft UI Dashboard PRO",
+      title: "Gestor Almacén",
       controls: "dashboardsExamples",
       isActive: "active",
     };
   },
   components: {
     SidenavCollapse,
-    SidenavCard,
     Shop,
     Office,
-    CreditCard,
-    Box3d,
     CustomerSupport,
     Document,
     Spaceship,
-    Settings,
   },
   methods: {
     getRoute() {

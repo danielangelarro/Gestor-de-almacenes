@@ -19,47 +19,55 @@
               <div class="mt-8 card card-plain">
                 <div class="pb-0 card-header text-start">
                   <h3 class="font-weight-bolder text-success text-gradient">
-                    Welcome back
+                    Bienvenido nuevamente
                   </h3>
-                  <p class="mb-0">Enter your email and password to sign in</p>
+                  <p class="mb-0">Introduzca su correo y contrase&ntilde;a para iniciar sesi&oacute;n</p>
                 </div>
                 <div class="card-body">
-                  <form role="form" class="text-start">
-                    <label>Email</label>
+                  <form @submit.prevent="signIn" role="form" class="text-start">
+                    <label>Correo</label>
                     <soft-input
+                      :value="email"
+                      @input="event => email = event.target.value"
                       id="email"
                       type="email"
                       placeholder="Email"
                       name="email"
                     />
-                    <label>Password</label>
+                    <label>Contrase&ntilde;a</label>
                     <soft-input
+                      :value="password"
+                      @input="event => password = event.target.value"
                       id="password"
                       type="password"
                       placeholder="Password"
                       name="password"
                     />
                     <soft-switch id="rememberMe" name="rememberMe" checked>
-                      Remember me
+                      Recu&eacute;rdame
                     </soft-switch>
+                    <soft-alert v-if="error_msg != ''" class="font-weight-light" color="danger" dismissible>
+                      <span class="text-sm">{{ error_msg }}</span>
+                    </soft-alert>
                     <div class="text-center">
                       <soft-button
                         class="my-4 mb-2"
                         variant="gradient"
                         color="success"
                         full-width
-                        >Sign in
+                        type="submit"
+                        >Iniciar Sesi&oacute;n
                       </soft-button>
                     </div>
                   </form>
                 </div>
                 <div class="px-1 pt-0 text-center card-footer px-lg-2">
                   <p class="mx-auto mb-4 text-sm">
-                    Don't have an account?
+                    No tiene cuenta a&uacute;n?
                     <router-link
                       :to="{ name: 'Sign Up' }"
                       class="text-success text-gradient font-weight-bold"
-                      >Sign up</router-link
+                      >Registrar</router-link
                     >
                   </p>
                 </div>
@@ -91,20 +99,31 @@
 <script>
 import Navbar from "@/examples/PageLayout/Navbar.vue";
 import AppFooter from "@/examples/PageLayout/Footer.vue";
+import SoftAlert from "@/components/SoftAlert.vue";
 import SoftInput from "@/components/SoftInput.vue";
 import SoftSwitch from "@/components/SoftSwitch.vue";
 import SoftButton from "@/components/SoftButton.vue";
 const body = document.getElementsByTagName("body")[0];
 import { mapMutations } from "vuex";
+import { ref } from 'vue';
+import axios from 'axios';
 
 export default {
   name: "SignIn",
   components: {
     Navbar,
     AppFooter,
+    SoftAlert,
     SoftInput,
     SoftSwitch,
     SoftButton,
+  },
+  data() {
+    return {
+      email: '',
+      password: '',
+      error_msg: ''
+    };
   },
   created() {
     this.toggleEveryDisplay();
@@ -118,6 +137,28 @@ export default {
   },
   methods: {
     ...mapMutations(["toggleEveryDisplay", "toggleHideConfig"]),
+
+    async signIn() {
+      
+      try {
+        console.log(process.env.VUE_APP_BACKEND_URL);
+
+        const response = await axios.post('http://localhost:5000/auth/login', {
+          email: this.email,
+          password: this.password
+        });
+
+        if (response.data.success) {
+          this.$router.push('/dashboard');
+        }
+      } catch (error) {
+        if (error.response && error.response.data) {
+          this.error_msg = error.response.data.title;
+        } else {
+          this.error_msg = error.message;
+        }
+      }
+    }
   },
 };
 </script>

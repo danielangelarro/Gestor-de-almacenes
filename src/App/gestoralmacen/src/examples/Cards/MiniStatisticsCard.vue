@@ -1,119 +1,67 @@
 <template>
-  <div class="mb-4 card">
-    <div class="p-3 card-body">
-      <div class="d-flex" :class="directionReverse ? reverseDirection : ''">
-        <div>
-          <div
-            class="text-center shadow icon icon-shape border-radius-md"
-            :class="typeof icon === 'object' ? icon.background : ''"
-          >
-            <i
-              class="text-lg opacity-10"
-              :class="typeof icon === 'string' ? icon : icon.component"
-              aria-hidden="true"
-            ></i>
-          </div>
-        </div>
-        <div :class="classContent">
-          <div class="numbers">
-            <p
-              class="mb-0 text-sm text-capitalize font-weight-bold"
-              :class="title.color"
-            >
-              {{ typeof title === "string" ? title : title.text }}
-            </p>
-            <h5 class="mb-0 font-weight-bolder" :class="value.color">
-              {{
-                typeof value === "string" || typeof value === "number"
-                  ? value
-                  : value.text
-              }}
-              <span
-                class="text-sm font-weight-bolder"
-                :class="percentage.color"
-              >
-                {{
-                  typeof percentage === "number" ||
-                  typeof percentage === "string"
-                    ? `${percentage}`
-                    : ""
-                }}
-
-                {{
-                  percentage && percentage === "object"
-                    ? `${percentage.value}`
-                    : ""
-                }}
-              </span>
-            </h5>
-          </div>
-        </div>
+  <div class="card mb-2" :class="directionReverse ? reverseDirection : ''">
+    <div class="card-header p-3 pt-2">
+      <div
+        class="icon icon-lg icon-shape shadow text-center border-radius-xl mt-n4 position-absolute"
+        :class="`bg-gradient-${icon.background} shadow-${icon.background}`"
+      >
+        <i
+          class="material-icons opacity-10"
+          :class="typeof icon === 'string' ? icon : icon.name"
+          aria-hidden="true"
+        ></i>
       </div>
+      <div class="pt-1" :class="isRTL ? 'text-start' : 'text-end'">
+        <p class="text-sm mb-0 text-capitalize">{{ title.text }}</p>
+        <h4 class="mb-0">{{ title.value }}</h4>
+      </div>
+    </div>
+    <hr class="dark horizontal my-0" />
+    <div class="card-footer p-3" :class="isRTL ? 'text-start' : 'text-end'">
+      <!--  eslint-disable-next-line vue/no-v-html -->
+      <p class="mb-0" v-html="detail"></p>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "MiniStatisticsCard",
-  props: {
-    directionReverse: {
-      type: Boolean,
-      default: false,
-    },
-    title: {
-      type: [Object, String],
-      default: null,
-      text: {
-        type: String,
-      },
-      color: {
-        type: String,
-      },
-    },
-    value: {
-      type: [Object, String, Number],
-      required: true,
-      text: {
-        type: [String, Number],
-      },
-      color: {
-        type: String,
-      },
-    },
-    percentage: {
-      type: [Object, String],
-      value: {
-        type: String,
-      },
-      color: {
-        type: String,
-      },
-      default: () => ({
-        color: "text-success",
-      }),
-    },
-    icon: {
-      type: [String, Object],
-      component: {
-        type: String,
-      },
-      background: {
-        type: String,
-      },
-      default: () => ({
-        background: "bg-white",
-      }),
-    },
-    classContent: {
-      type: String,
-      default: "",
-    },
-  },
   data() {
     return {
       reverseDirection: "flex-row-reverse justify-content-between",
     };
+  },
+  props: {
+    title: {
+      type: Object,
+      required: true,
+      text: String,
+      value: [Number, String],
+    },
+    detail: {
+      type: String,
+      default: "",
+    },
+    icon: {
+      type: Object,
+      required: true,
+      name: String,
+      color: String,
+      background: String,
+      default: () => ({
+        color: "text-white",
+        background: "success",
+      }),
+    },
+    directionReverse: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    ...mapState(["isRTL"]),
   },
 };
 </script>

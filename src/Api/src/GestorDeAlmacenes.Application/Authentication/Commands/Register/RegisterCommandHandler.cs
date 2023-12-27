@@ -36,6 +36,11 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<A
 
         if (!validationResult.IsValid)
         {
+            foreach (var item in validationResult.Errors)
+            {
+                Console.WriteLine(item.ErrorMessage);
+                
+            }
             return Errors.Model.ModelsInvalid;
         }
 
@@ -54,8 +59,6 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<A
         _userRepository.Add(user);
 
         var token = _jwtTokenGenerator.GenerateToken(user);
-
-        Console.WriteLine($"Register: {token}");
 
         return new AuthenticationResult(
             user,
