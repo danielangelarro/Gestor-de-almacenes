@@ -77,7 +77,7 @@ router.beforeEach((to, from, next) => {
     // si no, redirigir a la página de inicio de sesión.
     if (!isAuthenticated()) {
       next({
-        path: '/login',
+        path: '/sign-in',
         query: { redirect: to.fullPath }
       })
     } else {

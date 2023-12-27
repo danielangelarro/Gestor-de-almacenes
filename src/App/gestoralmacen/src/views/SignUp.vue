@@ -166,8 +166,6 @@ export default {
           password: this.password
         });
 
-        console.log(response.status);
-
         if (response.status == 200) {
           localStorage.setItem('user-token', response.data.token);
 
@@ -179,8 +177,6 @@ export default {
         } else {
           this.error_msg = error.message;
         }
-
-        console.log(JSON.stringify(error.response.data));
       }
     }
   },

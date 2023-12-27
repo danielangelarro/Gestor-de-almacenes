@@ -141,14 +141,14 @@ export default {
     async signIn() {
       
       try {
-        console.log(process.env.VUE_APP_BACKEND_URL);
-
         const response = await axios.post('http://localhost:5000/auth/login', {
           email: this.email,
           password: this.password
         });
 
-        if (response.data.success) {
+        if (response.status == 200) {
+          localStorage.setItem('user-token', response.data.token);
+
           this.$router.push('/dashboard');
         }
       } catch (error) {
