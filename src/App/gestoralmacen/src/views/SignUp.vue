@@ -159,7 +159,7 @@ export default {
           this.error_msg = 'Debe aceptar nuestros Términos y Condiciones.';
         }
 
-        const response = await axios.post('http://localhost:5000/auth/register', {
+        const response = await axios.post('https://localhost:5001/auth/register', {
           firstname: this.name,
           lastname: this.lastname,
           email: this.email,

@@ -105,7 +105,6 @@ import SoftSwitch from "@/components/SoftSwitch.vue";
 import SoftButton from "@/components/SoftButton.vue";
 const body = document.getElementsByTagName("body")[0];
 import { mapMutations } from "vuex";
-import { ref } from 'vue';
 import axios from 'axios';
 
 export default {
@@ -141,7 +140,7 @@ export default {
     async signIn() {
       
       try {
-        const response = await axios.post('http://localhost:5000/auth/login', {
+        const response = await axios.post('https://localhost:5001/auth/login', {
           email: this.email,
           password: this.password
         });

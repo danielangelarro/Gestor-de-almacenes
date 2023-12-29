@@ -12,25 +12,21 @@
         :class="this.$store.state.isRTL ? 'px-0' : 'me-sm-4'"
         id="navbar"
       >
-        <div
-          class="pe-md-3 d-flex align-items-center"
-          :class="this.$store.state.isRTL ? 'me-md-auto' : 'ms-md-auto'"
-        >
-          <div class="input-group">
-            <span class="input-group-text text-body"
-              ><i class="fas fa-search" aria-hidden="true"></i
-            ></span>
-            <input
-              type="text"
-              class="form-control"
-              :placeholder="
-                this.$store.state.isRTL ? 'أكتب هنا...' : 'Type here...'
-              "
-            />
-          </div>
-        </div>
-        <ul class="navbar-nav justify-content-end">
-          <li class="nav-item d-flex align-items-center">
+        <ul class="ms-md-auto navbar-nav justify-content-end">
+          <li v-if="authenticated" class="nav-item d-flex align-items-center">
+            <router-link
+              :to="{ name: 'Logout' }"
+              class="px-0 nav-link font-weight-bold"
+              :class="textWhite ? textWhite : 'text-body'"
+            >
+              <i
+                class="fa fa-sign-out"
+                :class="this.$store.state.isRTL ? 'ms-sm-2' : 'me-sm-1'"
+              ></i>
+              <span class="d-sm-inline d-none">Logout </span>
+            </router-link>
+          </li>
+          <li v-else class="nav-item d-flex align-items-center">
             <router-link
               :to="{ name: 'Sign In' }"
               class="px-0 nav-link font-weight-bold"
@@ -40,10 +36,7 @@
                 class="fa fa-user"
                 :class="this.$store.state.isRTL ? 'ms-sm-2' : 'me-sm-1'"
               ></i>
-              <span v-if="this.$store.state.isRTL" class="d-sm-inline d-none"
-                >يسجل دخول</span
-              >
-              <span v-else class="d-sm-inline d-none">Sign In </span>
+              <span class="d-sm-inline d-none">Sign In </span>
             </router-link>
           </li>
           <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
@@ -203,17 +196,23 @@
 <script>
 import Breadcrumbs from "../Breadcrumbs.vue";
 import { mapMutations, mapActions } from "vuex";
+import { isAuthenticated } from "@/store/auth";
 
 export default {
   name: "navbar",
   data() {
     return {
       showMenu: false,
+      authenticated: false
     };
   },
   props: ["minNav", "textWhite"],
   created() {
     this.minNav;
+  },
+  mounted() {
+    this.authenticated = isAuthenticated();
+    console.log(this.authenticated);
   },
   methods: {
     ...mapMutations(["navbarMinimize", "toggleConfigurator"]),

@@ -3,9 +3,15 @@ export function isAuthenticated() {
 
     if (token) {
         const jwtPayload = JSON.parse(atob(token.split('.')[1]));
+
         console.log(jwtPayload);
+
         return jwtPayload && jwtPayload.exp > Date.now() / 1000;
     }
 
     return false;
+}
+
+export function logout() {
+    localStorage.removeItem('user-token');
 }

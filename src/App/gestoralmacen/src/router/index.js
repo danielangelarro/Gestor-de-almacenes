@@ -1,7 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { isAuthenticated } from "@/store/auth"
+import { isAuthenticated, logout } from "@/store/auth"
 import Dashboard from "@/views/Dashboard.vue";
 import Tables from "@/views/Tables.vue";
+import Cliente from "@/views/Client.vue";
+import Proveedor from "@/views/Proveedor.vue";
 import Billing from "@/views/Billing.vue";
 import VirtualReality from "@/views/VirtualReality.vue";
 import Profile from "@/views/Profile.vue";
@@ -16,9 +18,30 @@ const routes = [
     redirect: "/dashboard",
   },
   {
+    path: "/logout",
+    name: "Logout",
+    beforeEnter: (to, from, next) => {
+      logout();
+      next('/sign-in');
+    },
+    meta: { requiresAuth: true }
+  },
+  {
     path: "/dashboard",
     name: "Dashboard",
     component: Dashboard,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: "/cliente",
+    name: "Cliente",
+    component: Cliente,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: "/proveedor",
+    name: "Proveedor",
+    component: Proveedor,
     meta: { requiresAuth: true }
   },
   {

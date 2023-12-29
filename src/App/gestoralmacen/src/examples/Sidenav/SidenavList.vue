@@ -27,6 +27,20 @@
         </h6>
       </li>
       <li class="nav-item">
+        <sidenav-collapse navText="Cliente" :to="{ name: 'Cliente' }">
+          <template #icon>
+            <customer-support />
+          </template>
+        </sidenav-collapse>
+      </li>
+      <li class="nav-item">
+        <sidenav-collapse navText="Proveedor" :to="{ name: 'Proveedor' }">
+          <template #icon>
+            <customer-support />
+          </template>
+        </sidenav-collapse>
+      </li>
+      <li class="nav-item">
         <sidenav-collapse navText="Profile" :to="{ name: 'Profile' }">
           <template #icon>
             <customer-support />
