@@ -1,6 +1,9 @@
 using GestorDeAlmacenes.Application;
 using GestorDeAlmacenes.Infrastructure;
 using GestorDeAlmacenes.API.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 
         .ConfigureAutheticationServices(builder.Configuration)
         .SwaggerDocumentatiobService();
-    
+
     builder.Services.AddCors(options =>
     {
         options.AddPolicy("MyPolicy",
@@ -20,7 +23,6 @@ var builder = WebApplication.CreateBuilder(args);
                 builder.WithOrigins("http://localhost:8080")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
-                        .SetIsOriginAllowed(origin => true)
                         .AllowCredentials();
             });
     });
@@ -34,6 +36,7 @@ var app = builder.Build();
 
     if (app.Environment.IsDevelopment())
     {
+        app.UseDeveloperExceptionPage();
         app.UseSwagger();
         app.UseSwaggerUI();
     }
