@@ -103,6 +103,8 @@ import SoftAlert from "@/components/SoftAlert.vue";
 import SoftInput from "@/components/SoftInput.vue";
 import SoftSwitch from "@/components/SoftSwitch.vue";
 import SoftButton from "@/components/SoftButton.vue";
+import { API_URL } from '@/config';
+
 const body = document.getElementsByTagName("body")[0];
 import { mapMutations } from "vuex";
 import axios from 'axios';
@@ -140,7 +142,7 @@ export default {
     async signIn() {
       
       try {
-        const response = await axios.post('https://localhost:5001/auth/login', {
+        const response = await axios.post(`${API_URL}/auth/login`, {
           email: this.email,
           password: this.password
         });

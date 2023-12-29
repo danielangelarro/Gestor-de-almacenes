@@ -1,7 +1,18 @@
 <template>
   <div class="card mb-4">
+    <soft-alert v-show="showConfirm" color="dark" class="font-weight-light m-4">
+      <p>Está seguro de querer borrar este autor?</p>
+      <soft-button @click="deleteAuthors(authorToDelete); showConfirm = false;">Confirmar</soft-button>
+      <span>&nbsp;</span>
+      <soft-button color="danger" @click="showConfirm = false;">Cancelar</soft-button>
+    </soft-alert>
+
+    <soft-alert v-if="error_msg != ''" class="font-weight-light m-4" color="danger" dismissible>
+        <span class="text-sm">{{ error_msg }}</span>
+    </soft-alert>
+
     <div class="card-header pb-0">
-      <h6>Authors table</h6>
+      <h6>{{ name_table }}</h6>
     </div>
     <div class="card-body px-0 pt-0 pb-2">
       <div class="table-responsive p-0">
@@ -36,8 +47,8 @@
               <th class="text-secondary opacity-7"></th>
             </tr>
           </thead>
-          <tbody>
-            <tr v-for="auth in authors" :key="auth.id">
+          <tbody v-if="this.authors.length > 0">
+            <tr v-for="auth in authors" :key="auth[key_table]">
               <td>
                 <div class="d-flex px-2 py-1">
                   <div>
@@ -79,14 +90,31 @@
               </td>
               <td class="align-middle">
                 <a
-                  href="javascript:;"
-                  class="text-secondary font-weight-bold text-xs"
+                  @click="$emit('emit-author-edit', auth)"
+                  href="#"
+                  class="text-dark font-weight-bold text-xs"
                   data-toggle="tooltip"
-                  data-original-title="Edit user"
-                  >Edit</a
-                >
+                  data-original-title="Editar autor"
+                  >
+                  <i class="fa fa-pencil-alt">&nbsp;&nbsp;Editar</i>
+                </a>
+                <span>&nbsp;&nbsp;</span>
+                <a
+                  @click="confirmDelete(auth[key_table])"
+                  href="#"
+                  class="text-danger font-weight-bold text-xs"
+                  data-toggle="tooltip"
+                  data-original-title="Delete user"
+                  >
+                  <i class="fa fa-trash-o">&nbsp;&nbsp;Borrar</i>
+                </a>
               </td>
             </tr>
+          </tbody>
+          <tbody v-else>
+              <tr>
+                  <td colspan="6">Loading...</td>
+              </tr>
           </tbody>
         </table>
       </div>
@@ -97,23 +125,73 @@
 <script>
 import SoftAvatar from "@/components/SoftAvatar.vue";
 import SoftBadge from "@/components/SoftBadge.vue";
+import SoftAlert from "@/components/SoftAlert.vue";
+import SoftButton from "@/components/SoftButton.vue";
+import { API_URL } from '@/config';
+import axios from 'axios';
 import img1 from "../../assets/img/team-2.jpg";
 
 export default {
   name: "authors-table",
-  props: ['authors', 'func_auth'],
-  data() {
-    return {
-      img1
-    };
-  },
-  mounted() {
-    console.log(this.authors);
-    console.log(this.func_auth);
+  props: {
+    func_auth: String, 
+    name_table: String, 
+    var_name: String,
+    key_table: String
   },
   components: {
     SoftAvatar,
     SoftBadge,
+    SoftAlert,
+    SoftButton
   },
+  mounted() {
+    this.getAuthors();
+  },
+  data() {
+    return {
+      img1,
+      showConfirm: false,
+      authorToDelete: null,
+      authors: [],
+      link: `${API_URL}/${this.func_auth}`,
+      error_msg: ''
+    };
+  },
+  methods: {
+    async getAuthors() {
+      axios.get(this.link)
+        .then(res => {
+          this.authors = res.data.value[this.var_name];
+        })
+        .catch(error => {
+          if (error.response && error.response.data) {
+            this.error_msg = error.response.data.title;
+          } else {
+            this.error_msg = error.message;
+          }
+        });
+    },
+
+    async confirmDelete(id) {
+      this.authorToDelete = id;
+      this.showConfirm = true;
+    },
+
+    async deleteAuthors() {
+      axios.delete(`${this.link}/${this.authorToDelete}`)
+        .then(res => {
+          res;
+          this.getAuthors();
+        })
+        .catch(error => {
+          if (error.response && error.response.data) {
+            this.error_msg = error.response.data.title;
+          } else {
+            this.error_msg = error.message;
+          }
+        });
+    }
+  }
 };
 </script>

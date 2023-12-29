@@ -118,6 +118,7 @@ import AppFooter from "@/examples/PageLayout/Footer.vue";
 import SoftInput from "@/components/SoftInput.vue";
 import SoftCheckbox from "@/components/SoftCheckbox.vue";
 import SoftButton from "@/components/SoftButton.vue";
+import { API_URL } from '@/config';
 
 import { mapMutations } from "vuex";
 import axios from 'axios';
@@ -159,7 +160,7 @@ export default {
           this.error_msg = 'Debe aceptar nuestros Términos y Condiciones.';
         }
 
-        const response = await axios.post('https://localhost:5001/auth/register', {
+        const response = await axios.post(`${API_URL}/auth/register`, {
           firstname: this.name,
           lastname: this.lastname,
           email: this.email,

@@ -1,50 +1,66 @@
 <template>
-    <div class="py-4 container-fluid">
-      <div class="row">
-        <div class="col-12">
-          <authors-table :authors="authorsList" :func_auth="func_auth" />
-        </div>
+  <div class="py-4 container-fluid">
+    <create-authors-card 
+      :func_auth="func_auth" 
+      @author-added="getAuthors">
+    </create-authors-card>
+    
+    <edit-authors-card
+      v-if="this.show_edit"
+      :func_auth="func_auth"
+      :auth_param="params"
+      @author-edited="getAuthors"
+      @author-cancel-edit="this.show_edit = false;"
+    >
+    </edit-authors-card>
+    
+    <div class="row">
+      <div class="col-12">
+        <authors-table 
+          ref="authorsTable"
+          :func_auth="func_auth" 
+          :name_table="name_table" 
+          :var_name="var_name"
+          :key_table="key_table"
+          @emit-author-edit="handleEditAuthor"
+        />
       </div>
     </div>
-  </template>
-  
-  <script>
-  import AuthorsTable from "./components/AuthorsTable";
-  import axios from 'axios';
-  
-  export default {
-    name: "cliente",
-    components: {
-      AuthorsTable,
-    },
-    mounted() {
-        this.getClientes();
-    },
-    data() {
-        return {
-            authorsList: [],
-            func_auth: 'Cliente'
-        };
-    },
-    methods: {
-        async getClientes() {
-            
-            axios.get('https://localhost:5001/cliente')
-                .then(res => {
-                    this.authorsList = res.data.value.clientes;
-                })
-                .catch(error => {
-                    if (error.response && error.response.data) {
-                        this.error_msg = error.response.data.title;
-                    } else {
-                        this.error_msg = error.message;
-                    }
+  </div>
+</template>
 
-                    console.log('error...');
-                    console.log(error);
-                })
-        }
+<script>
+import AuthorsTable from "./components/AuthorsTable";
+import CreateAuthorsCard from "./components/CreateAuthorsCard.vue";
+import EditAuthorsCard from "./components/EditAuthorsCard.vue";
+
+export default {
+  name: "cliente",
+  components: {
+    AuthorsTable,
+    CreateAuthorsCard,
+    EditAuthorsCard
+  },
+  data() {
+    return {
+      func_auth: 'cliente',
+      var_name: 'clientes',
+      name_table: 'Lista de Clientes',
+      key_table: 'iD_Cliente',
+      show_edit: false,
+      params: null
+    };
+  },
+  methods: {
+    getAuthors() {
+      this.show_edit = false;
+      this.$refs.authorsTable.getAuthors();
+    },
+
+    handleEditAuthor(auth) {
+      this.show_edit = true;
+      this.params = auth;
     }
-  };
-  </script>
-  
+  },
+};
+</script>

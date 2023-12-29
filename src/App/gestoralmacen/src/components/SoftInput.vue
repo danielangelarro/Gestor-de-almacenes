@@ -7,6 +7,7 @@
       <input
         :id="id"
         :type="type"
+        :value="value"
         class="form-control"
         :class="getClasses(size, success, error)"
         :name="name"
