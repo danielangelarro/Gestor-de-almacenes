@@ -1,7 +1,19 @@
 <template>
-    <div class="card h-100 col-4 m-auto mb-4">
+    <div class="card h-100 col-5 m-auto mb-4">
         <div class="p-3 card-body">
             <div class="list-group">
+                <div class="row mb-2 border-0">
+                    <div class="col">
+                        <soft-input
+                            :value="this.ID"
+                            id="uuid"
+                            type="text"
+                            name="uuid"
+                            textAlign="center"
+                            isReadonly="true"
+                        ></soft-input>
+                    </div>   
+                </div>
                 <div class="row mb-2 border-0">
                     <div class="col">
                         <h6 class="mb-0 text-sm">Nombres</h6>
@@ -116,10 +128,15 @@ export default {
         SoftInput
     },
     mounted() {
-        console.log(this.params);
+        if (this.func_auth == 'cliente') {
+            this.ID = this.params.iD_Cliente
+        } else {
+            this.ID = this.params.iD_Proveedor
+        }
     },
     data() {
         return {
+            ID: '',
             error_msg: '',
             params: this.auth_param
         };

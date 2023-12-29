@@ -13,6 +13,8 @@
         :name="name"
         :placeholder="placeholder"
         :isRequired="isRequired"
+        :style="{ 'text-align': textAlign }" 
+        :readonly="isReadonly"
         @input="$emit('input', $event.target.value)"
       />
       <span v-if="iconDir === 'right'" class="input-group-text">
@@ -70,6 +72,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    textAlign: {
+      type: String,
+      default: 'left'
+    },
+    isReadonly: {
+      type: Boolean,
+      default: false
+    }
   },
   methods: {
     getClasses: (size, success, error) => {

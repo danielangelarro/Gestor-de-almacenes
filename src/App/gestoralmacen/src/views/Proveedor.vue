@@ -1,9 +1,5 @@
 <template>
   <div class="py-4 container-fluid">
-    <create-authors-card 
-      :func_auth="func_auth" 
-      @author-added="getAuthors">
-    </create-authors-card>
 
     <edit-authors-card
       v-if="this.show_edit"
@@ -13,6 +9,12 @@
       @author-cancel-edit="this.show_edit = false;"
     >
     </edit-authors-card>
+
+    <create-authors-card 
+      v-else
+      :func_auth="func_auth" 
+      @author-added="getAuthors">
+    </create-authors-card>
 
     <div class="row">
       <div class="col-12">

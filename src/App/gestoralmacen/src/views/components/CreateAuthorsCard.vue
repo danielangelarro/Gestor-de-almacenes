@@ -1,5 +1,5 @@
 <template>
-    <div v-if="show_conditional" class="card h-100 col-4 m-auto mb-4">
+    <div v-if="show_conditional" class="card h-100 col-5 m-auto mb-4">
         <div class="p-3 card-body">
             <div class="list-group">
                 <div class="row mb-2 border-0">
