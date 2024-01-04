@@ -24,8 +24,6 @@ public class AddProductCommandsHandler : IRequestHandler<AddProductCommands, Err
             ID_Producto = Guid.NewGuid(),
             Nombre = command.ProductName,
             Descripcion = command.ProductDescription,
-            Precio_Total = command.ProductPrice,
-            Precio_Unitario = command.Precio_Unitario,
             Tipo = command.Tipo,
             Alto = command.Alto,
             Ancho = command.Ancho,

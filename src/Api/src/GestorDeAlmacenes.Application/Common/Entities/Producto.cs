@@ -9,8 +9,6 @@ public class Producto
    public Guid ID_Producto { get; set; }
    public string Nombre { get; set; }
    public string Descripcion { get; set; }
-   public float Precio_Total { get; set; }
-   public float Precio_Unitario { get; set; }
    public string Tipo { get; set; }
    public float Alto { get; set; }
    public float Ancho { get; set; }

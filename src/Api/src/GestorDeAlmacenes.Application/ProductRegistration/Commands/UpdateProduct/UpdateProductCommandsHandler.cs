@@ -26,8 +26,6 @@ public class UpdateProductCommandsHandler : IRequestHandler<UpdateProductCommand
 
         product.Nombre = command.ProductName;
         product.Descripcion = command.ProductDescription;
-        product.Precio_Total = command.ProductPrice;
-        product.Precio_Unitario = command.Precio_Unitario;
         product.Tipo = command.Tipo;
         product.Alto = command.Alto;
         product.Ancho = command.Ancho;

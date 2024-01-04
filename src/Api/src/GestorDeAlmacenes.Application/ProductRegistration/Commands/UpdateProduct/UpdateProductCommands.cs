@@ -8,8 +8,6 @@ public record UpdateProductCommands(
    Guid Id,
    string ProductName,
    string ProductDescription,
-   float ProductPrice,
-   float Precio_Unitario,
    string Tipo,
    float Alto,
    float Ancho,

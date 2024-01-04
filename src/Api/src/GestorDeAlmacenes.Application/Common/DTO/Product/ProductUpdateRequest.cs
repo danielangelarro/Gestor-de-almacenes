@@ -6,8 +6,6 @@ namespace GestorDeAlmacenes.Application.DTO.Product
         Guid ID_Producto,
         string Nombre,
         string Descripcion,
-        float Precio_Total,
-        float Precio_Unitario,
         string Tipo,
         float Alto,
         float Ancho,
