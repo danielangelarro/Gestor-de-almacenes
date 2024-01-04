@@ -47,30 +47,6 @@
                 
                 <div class="row mb-2 border-0">
                     <div class="col">
-                        <h6 class="mb-0 text-sm">Precio Total</h6>
-                        <soft-input
-                            :value="params.precio_Total"
-                            @input="event => params.precio_Total = event.target.value"
-                            id="precio_Total"
-                            type="number"
-                            placeholder="Precio Total"
-                            name="precio_Total"
-                        ></soft-input>
-                    </div>  
-                    
-                    <div class="col">
-                        <h6 class="mb-0 text-sm">Precio Unitario</h6>
-                        <soft-input
-                            :value="params.precio_Unitario"
-                            @input="event => params.precio_Unitario = event.target.value"
-                            id="precio_Unitario"
-                            type="number"
-                            placeholder="Precio Unitario"
-                            name="precio_Unitario"
-                        ></soft-input>
-                    </div>
-                    
-                    <div class="col">
                         <h6 class="mb-0 text-sm">Tipo</h6>
                         <soft-input
                             :value="params.tipo"
@@ -198,8 +174,6 @@ export default {
                 .then(res => {
                     res;
                     this.params.nombre = "";
-                    this.params.precio_Total = 0;
-                    this.params.precio_Unitario = 0;
                     this.params.descripcion = "";
                     this.params.tipo = "";
                     this.params.alto = 0;

@@ -34,30 +34,6 @@
                 
                 <div class="row mb-2 border-0">
                     <div class="col">
-                        <h6 class="mb-0 text-sm">Precio Total</h6>
-                        <soft-input
-                            :value="precio_Total"
-                            @input="event => precio_Total = event.target.value"
-                            id="precio_Total"
-                            type="number"
-                            placeholder="Precio Total"
-                            name="precio_Total"
-                        ></soft-input>
-                    </div>  
-                    
-                    <div class="col">
-                        <h6 class="mb-0 text-sm">Precio Unitario</h6>
-                        <soft-input
-                            :value="precio_Unitario"
-                            @input="event => precio_Unitario = event.target.value"
-                            id="precio_Unitario"
-                            type="number"
-                            placeholder="Precio Unitario"
-                            name="precio_Unitario"
-                        ></soft-input>
-                    </div>
-                    
-                    <div class="col">
                         <h6 class="mb-0 text-sm">Tipo</h6>
                         <soft-input
                             :value="tipo"
@@ -177,8 +153,6 @@ export default {
     data() {
         return {
             nombre: "",
-            precio_Total: 0,
-            precio_Unitario: 0,
             descripcion: "",
             tipo: "",
             alto: 0,
@@ -195,8 +169,6 @@ export default {
         async addProducts() {
             axios.post(`${API_URL}/product`, {
                 nombre: this.nombre,
-                precio_Total: this.precio_Total,
-                precio_Unitario: this.precio_Unitario,
                 descripcion: this.descripcion,
                 tipo: this.tipo,
                 alto: this.alto,
@@ -209,8 +181,6 @@ export default {
                 .then(res => {
                     res;
                     this.nombre = "",
-                    this.precio_Total = 0,
-                    this.precio_Unitario = 0,
                     this.descripcion = "",
                     this.tipo = "",
                     this.alto = 0,
