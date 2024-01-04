@@ -13,6 +13,7 @@ public record UpdateProductCommands(
    float Ancho,
    float Largo,
    string Unidad_Dimensiones,
-   float Peso
+   float Peso,
+   bool EnAlmacen
 ) : IRequest<ErrorOr<ProductResult>>;
 

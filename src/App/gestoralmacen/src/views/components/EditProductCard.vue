@@ -121,6 +121,18 @@
                             placeholder="Unidad Dimensiones"
                             name="unidad_Dimensiones"
                         ></soft-input>
+                    </div>
+                    
+                    <div class="col">
+                        <h6 class="mb-0 text-sm">En Almac&eacute;n</h6>
+                        <soft-switch
+                            :checked="params.enAlmacen"
+                            @change="event => params.enAlmacen = event.target.checked"
+                            id="unidad_Dimensiones"
+                            name="unidad_Dimensiones"
+                            label-class="mb-0 text-body ms-3 text-truncate w-80"
+                            class="ps-0 ms-auto"
+                        ></soft-switch>
                     </div>    
                 </div>
             </div>
@@ -141,6 +153,7 @@ import SoftButton from "@/components/SoftButton.vue";
 import SoftInput from "@/components/SoftInput.vue";
 import SoftTextarea from "@/components/SoftTextarea.vue";
 import SoftAlert from "@/components/SoftAlert.vue";
+import SoftSwitch from "@/components/SoftSwitch.vue";
 import { API_URL } from '@/config';
 import axios from 'axios';
 
@@ -160,7 +173,8 @@ export default {
         SoftAlert,
         SoftButton,
         SoftInput,
-        SoftTextarea
+        SoftTextarea,
+        SoftSwitch
     },
     data() {
         return {
@@ -172,6 +186,7 @@ export default {
         async editProducts() {
             axios.put(`${API_URL}/product`, this.params)
                 .then(res => {
+                    console.log(this.params.enAlmacen);
                     res;
                     this.params.nombre = "";
                     this.params.descripcion = "";

@@ -32,6 +32,7 @@ public class UpdateProductCommandsHandler : IRequestHandler<UpdateProductCommand
         product.Largo = command.Largo;
         product.Unidad_Dimensiones = command.Unidad_Dimensiones;
         product.Peso = command.Peso;
+        product.EnAlmacen = command.EnAlmacen;
 
        await _productRepository.UpdateProductoAsync(product);
        

@@ -57,8 +57,6 @@ public class ProductController : ApiController
         var query = new AddProductCommands(
             request.Nombre,
             request.Descripcion,
-            request.Precio_Total,
-            request.Precio_Unitario,
             request.Tipo,
             request.Alto,
             request.Ancho,
@@ -82,14 +80,13 @@ public class ProductController : ApiController
             request.ID_Producto,
             request.Nombre,
             request.Descripcion,
-            request.Precio_Total,
-            request.Precio_Unitario,
             request.Tipo,
             request.Alto,
             request.Ancho,
             request.Largo,
             request.Unidad_Dimensiones,
-            request.Peso
+            request.Peso,
+            request.EnAlmacen
         );
 
         ErrorOr<ProductResult> productResult = await _mediator.Send(query);

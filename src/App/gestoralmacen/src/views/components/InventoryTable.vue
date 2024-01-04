@@ -23,17 +23,22 @@
               <th
                 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
               >
-                Precio Unitario
+                Tipo
               </th>
               <th
                 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
               >
-                Tipo
+                Dimensiones
               </th>
               <th
                 class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2"
               >
-                Cantidad Actual
+                Peso
+              </th>
+              <th
+                class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2"
+              >
+                En Almac&eacute;n
               </th>
               <th></th>
             </tr>
@@ -55,20 +60,22 @@
                 </div>
               </td>
               <td>
-                <p class="text-sm font-weight-bold mb-0">${{ product.precio_Unitario }}</p>
+                <p class="text-sm font-weight-bold mb-0">{{ product.tipo }}</p>
               </td>
               <td>
-                <span class="text-xs font-weight-bold">{{ product.tipo }}</span>
+                <span class="text-xs font-weight-bold">
+                  {{ product.alto }} x {{ product.ancho }} x {{ product.largo }} {{ product.unidad_Dimensiones }}<sup>3</sup>
+                </span>
               </td>
               <td class="align-middle text-center">
-                <span class="text-xs font-weight-bold">{{ product.tipo }}</span>
+                <span class="text-xs font-weight-bold">{{ product.peso }}</span>
+              </td>
+              <td class="align-middle text-center">
+                <soft-badge :color="[product.enAlmacen ? 'success' : 'danger']" variant="gradient" size="sm"
+                  >Existencia</soft-badge
+                >
               </td>
               <td class="align-middle">
-                <router-link :to="{ name: 'DetalleProducto', params: { id: product.iD_Producto } }"
-                  class="text-dark font-weight-bold text-xs"
-                  >
-                  <i class="fa fa-file">&nbsp;&nbsp; Detalles</i>
-                </router-link>
                 <span>&nbsp;&nbsp;</span>
                 <a
                   @click="$emit('emit-product-edit', product)"
@@ -99,11 +106,15 @@
 </template>
 
 <script>
+import SoftBadge from '@/components/SoftBadge.vue';
 import { API_URL } from '@/config';
 import axios from 'axios';
 
 export default {
   name: "inventory-table",
+  components: {
+    SoftBadge
+  },
   data() {
     return {
       showConfirm: false,
