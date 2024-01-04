@@ -46,12 +46,14 @@
 </template>
 
 <script>
+import img from "@/assets/img/curved-images/curved14.jpg";
+
 export default {
   name: "DefaultProjectCard",
   props: {
     image: {
       type: String,
-      default: "",
+      default: img,
     },
     label: {
       type: String,

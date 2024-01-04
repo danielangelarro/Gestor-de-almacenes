@@ -5,9 +5,11 @@
     </label>
     <textarea
       :id="id"
+      :value="value"
       class="form-control"
-      rows="5"
+      :rows="rows"
       :placeholder="placeholder"
+      @input="$emit('input', $event.target.value)"
     ></textarea>
   </div>
 </template>
@@ -23,6 +25,14 @@ export default {
     placeholder: {
       type: String,
       default: "Your text here...",
+    },
+    value: {
+      type: String,
+      default: "",
+    },
+    rows: {
+      type: String,
+      default: "5",
     },
   },
 };

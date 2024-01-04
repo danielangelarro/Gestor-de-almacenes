@@ -12,7 +12,14 @@
         </sidenav-collapse>
       </li>
       <li class="nav-item">
-        <sidenav-collapse navText="Inventario" :to="{ name: 'Tables' }">
+        <sidenav-collapse navText="Inventario" :to="{ name: 'Inventario' }">
+          <template #icon>
+            <office />
+          </template>
+        </sidenav-collapse>
+      </li>
+      <li class="nav-item">
+        <sidenav-collapse navText="Tables" :to="{ name: 'Tables' }">
           <template #icon>
             <office />
           </template>

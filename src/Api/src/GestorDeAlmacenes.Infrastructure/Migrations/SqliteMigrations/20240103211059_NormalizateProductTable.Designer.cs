@@ -3,6 +3,7 @@ using System;
 using GestorDeAlmacenes.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
 {
     [DbContext(typeof(GestorDeAlmacenesDBContext))]
-    partial class GestorDeAlmacenesDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240103211059_NormalizateProductTable")]
+    partial class NormalizateProductTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

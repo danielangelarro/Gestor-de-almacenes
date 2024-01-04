@@ -9,6 +9,8 @@ public class Ubicacion
    public int ID_Producto { get; set; }
    public int ID_Casillero { get; set; }   
    public int Cantidad { get; set; }
+   public DateTime Fecha_Llegada { get; set; }
+   public DateTime Fecha_Caducidad { get; set; }
 
    // Relaciones
    public Producto Producto { get; set; }

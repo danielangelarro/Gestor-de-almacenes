@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { isAuthenticated, logout } from "@/store/auth"
 import Dashboard from "@/views/Dashboard.vue";
+import Inventory from "@/views/Inventario.vue";
 import Tables from "@/views/Tables.vue";
 import Cliente from "@/views/Client.vue";
 import Proveedor from "@/views/Proveedor.vue";
@@ -10,6 +11,7 @@ import Profile from "@/views/Profile.vue";
 import Rtl from "@/views/Rtl.vue";
 import SignIn from "@/views/SignIn.vue";
 import SignUp from "@/views/SignUp.vue";
+import DetailProductCard from "@/views/components/DetailProductCard.vue";
 
 const routes = [
   {
@@ -30,6 +32,19 @@ const routes = [
     path: "/dashboard",
     name: "Dashboard",
     component: Dashboard,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: "/inventory",
+    name: "Inventario",
+    component: Inventory,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/detalle/:id',
+    name: 'DetalleProducto',
+    component: DetailProductCard,
+    props: true,
     meta: { requiresAuth: true }
   },
   {
