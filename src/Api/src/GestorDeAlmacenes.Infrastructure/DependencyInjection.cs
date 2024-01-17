@@ -59,6 +59,53 @@ public static class DependencyInjection
         services.AddScoped<IUbicacionRepository, UbicacionRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
 
+        Task.Run(
+            () => InitializeDatabase(services.BuildServiceProvider().GetRequiredService<GestorDeAlmacenesDBContext>())
+        );
+
         return services;
+    }
+
+    public static async Task InitializeDatabase(GestorDeAlmacenesDBContext context)
+    {
+        RackRepository rackRepository = new RackRepository(context);
+
+        if (await rackRepository.GetMermaRacksAsync() is not Rack merma_rack)
+        {
+            merma_rack = new Rack{
+                ID_Rack = Guid.NewGuid(),
+                Pasillo = "Merma",
+                Cantidad_Casillas = 1,
+                Filas = 1,
+                Columnas = 1,
+                Peso_Maximo = float.MaxValue,
+                Alto = float.MaxValue,
+                Ancho = float.MaxValue,
+                Largo = float.MaxValue,
+                Unidad_Dimensiones = "m",
+                Type = "merma"
+            };
+
+            await rackRepository.AddRackAsync(merma_rack);
+        }
+
+        if (await rackRepository.GetWaitRacksAsync() is not Rack wait_rack)
+        {
+            wait_rack = new Rack{
+                ID_Rack = Guid.NewGuid(),
+                Pasillo = "Merma",
+                Cantidad_Casillas = 1,
+                Filas = 1,
+                Columnas = 1,
+                Peso_Maximo = float.MaxValue,
+                Alto = float.MaxValue,
+                Ancho = float.MaxValue,
+                Largo = float.MaxValue,
+                Unidad_Dimensiones = "m",
+                Type = "wait"
+            };
+
+            await rackRepository.AddRackAsync(wait_rack);
+        }
     }
 }

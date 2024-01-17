@@ -1,56 +1,61 @@
 <template>
-    <div v-if="show_conditional" class="card h-100 col-5 m-auto mb-4">
+    <div class="card h-100 col-5 m-auto mb-4">
         <div class="p-3 card-body">
             <div class="list-group">
                 <div class="row mb-2 border-0">
                     <div class="col">
-                        <h6 class="mb-0 text-sm">Nombre</h6>
+                        <h6 class="mb-0 text-sm">Pasillo</h6>
                         <soft-input
-                            :value="nombre"
-                            @input="event => nombre = event.target.value"
-                            id="nombre"
+                            :value="params.pasillo"
+                            @input="event => params.pasillo = event.target.value"
+                            id="pasillo"
                             type="text"
-                            placeholder="Nombre"
-                            name="nombre"
+                            placeholder="Pasillo"
+                            name="pasillo"
                             rows="3"
+                            isReadonly="true"
+                        ></soft-input>
+                    </div>
+                    
+                    <div class="col">
+                        <h6 class="mb-0 text-sm">Cantidad Filas</h6>
+                        <soft-input
+                            :value="params.filas"
+                            @input="event => params.filas = event.target.value"
+                            id="filas"
+                            type="number"
+                            placeholder="Cantidad de Filas"
+                            name="filas"
+                            rows="3"
+                            isReadonly="true"
+                        ></soft-input>
+                    </div>
+                    
+                    <div class="col">
+                        <h6 class="mb-0 text-sm">Cantidad Columnas</h6>
+                        <soft-input
+                            :value="params.columnas"
+                            @input="event => params.columnas = event.target.value"
+                            id="columnas"
+                            type="number"
+                            placeholder="Cantidad de Columnas"
+                            name="columnas"
+                            rows="3"
+                            isReadonly="true"
                         ></soft-input>
                     </div>
                 </div>
 
                 <div class="row mb-2 border-0">
-                    <div class="col">
-                        <h6 class="mb-0 text-sm">Descripci&oacute;n</h6>
-                        <soft-textarea
-                            :value="descripcion"
-                            @input="event => descripcion = event.target.value"
-                            rows="3"
-                            id="descripcion"
-                            type="text"
-                            placeholder="Descripci&oacute;n"
-                            name="descripcion"
-                        ></soft-textarea>
-                    </div>
+                    <h1 class="mb-4 text-sm text-center">PROPIEDADES DE LOS CASILLEROS</h1>
                 </div>
-                
-                <div class="row mb-2 border-0">
-                    <div class="col">
-                        <h6 class="mb-0 text-sm">Tipo</h6>
-                        <soft-input
-                            :value="tipo"
-                            @input="event => tipo = event.target.value"
-                            id="tipo"
-                            type="text"
-                            placeholder="-----"
-                            name="Tipo"
-                        ></soft-input>
-                    </div>
-                </div>
+
                 <div class="row mb-2 border-0">
                     <div class="col">
                         <h6 class="mb-0 text-sm">Alto</h6>
                         <soft-input
-                            :value="alto"
-                            @input="event => alto = event.target.value"
+                            :value="params.alto"
+                            @input="event => params.alto = event.target.value"
                             id="alto"
                             type="number"
                             placeholder="Alto"
@@ -61,8 +66,8 @@
                     <div class="col">
                         <h6 class="mb-0 text-sm">Largo</h6>
                         <soft-input
-                            :value="largo"
-                            @input="event => largo = event.target.value"
+                            :value="params.largo"
+                            @input="event => params.largo = event.target.value"
                             id="largo"
                             type="number"
                             placeholder="Largo"
@@ -73,8 +78,8 @@
                     <div class="col">
                         <h6 class="mb-0 text-sm">Ancho</h6>
                         <soft-input
-                            :value="ancho"
-                            @input="event => ancho = event.target.value"
+                            :value="params.ancho"
+                            @input="event => params.ancho = event.target.value"
                             id="ancho"
                             type="number"
                             placeholder="ancho"
@@ -85,8 +90,8 @@
                     <div class="col">
                         <h6 class="mb-0 text-sm">Peso</h6>
                         <soft-input
-                            :value="peso"
-                            @input="event => peso = event.target.value"
+                            :value="params.peso_Maximo"
+                            @input="event => params.peso_Maximo = event.target.value"
                             id="peso"
                             type="number"
                             placeholder="peso"
@@ -99,7 +104,7 @@
                 <div class="row mb-2 border-0">
                     <div class="col">
                         <h6 class="mb-0 text-sm">Unidad Dimensiones</h6>
-                        <select v-model="unidad_Dimensiones">
+                        <select class="input" v-model="params.unidad_Dimensiones">
                             <option disabled value="">Seleccione una unidad de medida</option>
                             <option>cm</option>
                             <option>m</option>
@@ -113,14 +118,9 @@
                 <span class="text-sm">{{ error_msg }}</span>
             </soft-alert>
 
-            <soft-button @click="addProducts">Guardar</soft-button>
+            <soft-button @click="editRacks">Guardar</soft-button>
             <span>&nbsp;&nbsp;</span>
-            <soft-button color="danger" @click="show_conditional=false;">Cancelar</soft-button>
-        </div>
-    </div>
-    <div v-else class="row mb-4">
-        <div class="col-12">
-          <soft-button @click="show_conditional=true">Agregar</soft-button>
+            <soft-button color="danger" @click="$emit('rack-cancel-edit')">Cancelar</soft-button>
         </div>
     </div>
 </template>
@@ -128,66 +128,47 @@
 <script>
 import SoftButton from "@/components/SoftButton.vue";
 import SoftInput from "@/components/SoftInput.vue";
-import SoftTextarea from "@/components/SoftTextarea.vue";
 import SoftAlert from "@/components/SoftAlert.vue";
 import { API_URL } from '@/config';
 import axios from 'axios';
 
 export default {
-    name: "create-product-card",
+    name: "edit-rack-card",
     props: {
         show: {
             type: Boolean,
             default: false
+        },
+        rack_params: {
+            type: Object,
+            required: true
         }
     },
     components: {
         SoftAlert,
         SoftButton,
-        SoftInput,
-        SoftTextarea
+        SoftInput
     },
     data() {
         return {
-            nombre: "",
-            descripcion: "",
-            tipo: "",
-            alto: 0,
-            ancho: 0,
-            largo: 0,
-            unidad_Dimensiones: "",
-            peso: 0,
-            enAlmacen: true,
-            show_conditional: this.show,
+            params: this.rack_params,
             error_msg: ''
         };
     },
     methods: {
-        async addProducts() {
-            axios.post(`${API_URL}/product`, {
-                nombre: this.nombre,
-                descripcion: this.descripcion,
-                tipo: this.tipo,
-                alto: this.alto,
-                ancho: this.ancho,
-                largo: this.largo,
-                unidad_Dimensiones: this.unidad_Dimensiones,
-                peso: this.peso,
-                enAlmacen: this.enAlmacen
-            })
+        async editRacks() {
+            axios.put(`${API_URL}/rack`, this.params)
                 .then(res => {
                     res;
-                    this.nombre = "",
-                    this.descripcion = "",
-                    this.tipo = "",
-                    this.alto = 0,
-                    this.ancho = 0,
-                    this.largo = 0,
-                    this.unidad_Dimensiones = "",
-                    this.peso = 0,
-                    this.show_conditional = false;
+                    this.params.pasillo = "";
+                    this.params.casilleros = "";
+                    this.params.peso_Maximo = 0;
+                    this.params.alto = 0;
+                    this.params.ancho = 0;
+                    this.params.largo = 0;
+                    this.params.unidad_Dimensiones = "";
                     
-                    this.$emit('product-added');
+                    this.$emit('rack-edited');
                 })
                 .catch(error => {
                     if (error.response && error.response.data) {

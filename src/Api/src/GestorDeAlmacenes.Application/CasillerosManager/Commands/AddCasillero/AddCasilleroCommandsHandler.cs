@@ -22,6 +22,7 @@ public class AddCasilleroCommandsHandler : IRequestHandler<AddCasilleroCommands,
        {
             ID_Casillero = Guid.NewGuid(),
             ID_Rack = command.ID_Rack,
+            Index = command.Index,
             Area = command.Area,
             Peso_Maximo = command.Peso_Maximo,
             Alto = command.Alto,

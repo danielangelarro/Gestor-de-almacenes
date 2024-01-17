@@ -7,7 +7,7 @@
       <soft-button color="danger" @click="showConfirm = false;">Cancelar</soft-button>
     </soft-alert>
 
-    <soft-alert v-if="error_msg != ''" class="font-weight-light m-4" color="danger" dismissible>
+    <soft-alert v-show="error_msg != ''" class="font-weight-light m-4" color="danger" dismissible>
         <span class="text-sm">{{ error_msg }}</span>
     </soft-alert>
 
@@ -170,6 +170,7 @@ export default {
           } else {
             this.error_msg = error.message;
           }
+          console.log(error);
         });
     },
 
@@ -190,6 +191,7 @@ export default {
           } else {
             this.error_msg = error.message;
           }
+          console.log(error);
         });
     }
   }

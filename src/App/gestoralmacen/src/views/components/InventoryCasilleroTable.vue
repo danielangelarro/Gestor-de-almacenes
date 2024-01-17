@@ -8,7 +8,7 @@
     </soft-alert>
 
     <div class="card-header pb-0">
-      <h6>Productos</h6>
+      <h6>Productos en la Casilla</h6>
     </div>
     <soft-alert v-if="error_msg != ''" class="font-weight-light" color="danger" dismissible>
       <span class="text-sm">{{ error_msg }}</span>
@@ -112,42 +112,29 @@
 import SoftBadge from '@/components/SoftBadge.vue';
 import SoftAlert from '@/components/SoftAlert.vue';
 import SoftButton from '@/components/SoftButton.vue';
-import { API_URL } from '@/config';
 import axios from 'axios';
 
 export default {
-  name: "inventory-table",
+  name: "inventory-casillero-table",
   components: {
     SoftBadge,
     SoftAlert,
     SoftButton
   },
+  props: {
+    products: {
+      type: Array,
+      default: () => {}
+    }
+  },
   data() {
     return {
       showConfirm: false,
       productToDelete: null,
-      products: [],
       error_msg: ''
     };
   },
-  mounted() {
-    this.getProducts();
-  },
   methods: {
-    async getProducts() {
-      axios.get(`${API_URL}/product`)
-        .then(res => {
-          this.products = res.data.value['productos'];
-        })
-        .catch(error => {
-          if (error.response && error.response.data) {
-            this.error_msg = error.response.data.title;
-          } else {
-            this.error_msg = error.message;
-          }
-        });
-    },
-
     showDetail(id) {
       console.log('emit: ' + id);
       this.$emit('product-selected', id);

@@ -1,17 +1,17 @@
 <template>
   <div class="card mb-4">
     <soft-alert v-show="showConfirm" color="dark" class="font-weight-light m-4">
-      <p>Está seguro de querer borrar este producto?</p>
-      <soft-button @click="deleteProduct(); showConfirm = false;">Confirmar</soft-button>
+      <p>Está seguro de querer borrar este rack?</p>
+      <soft-button @click="deleteRack(); showConfirm = false;">Confirmar</soft-button>
       <span>&nbsp;</span>
       <soft-button color="danger" @click="showConfirm = false;">Cancelar</soft-button>
     </soft-alert>
 
     <div class="card-header pb-0">
-      <h6>Productos</h6>
+      <h6>Racks</h6>
     </div>
     <soft-alert v-if="error_msg != ''" class="font-weight-light" color="danger" dismissible>
-      <span class="text-sm">{{ error_msg }}</span>
+        <span class="text-sm">{{ error_msg }}</span>
     </soft-alert>
     <div class="card-body px-0 pt-0 pb-2">
       <div class="table-responsive p-0">
@@ -21,33 +21,28 @@
               <th
                 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
               >
-                Nombre
+                Pasillo
               </th>
               <th
-                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
               >
-                Tipo
+                Cantidad de Filas
               </th>
               <th
-                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
               >
-                Dimensiones
+                Cantidad de Columnas
               </th>
               <th
-                class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2"
+                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
               >
-                Peso
-              </th>
-              <th
-                class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2"
-              >
-                En Almac&eacute;n
+                Dimensi&oacute;n de los Casilleros
               </th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="product in this.products" :key="product['iD_Producto']">
+            <tr v-for="rack in this.racks" :key="rack['iD_Rack']">
               <td>
                 <div class="d-flex px-2">
                   <div>
@@ -58,44 +53,55 @@
                     />
                   </div>
                   <div class="my-auto">
-                    <h6 class="mb-0 text-sm">{{ product.nombre }}</h6>
+                    <h6 class="mb-0 text-sm">{{ rack.pasillo }}</h6>
                   </div>
                 </div>
               </td>
               <td>
-                <p class="text-sm font-weight-bold mb-0">{{ product.tipo }}</p>
-              </td>
-              <td>
-                <span class="text-xs font-weight-bold">
-                  {{ product.alto }} x {{ product.ancho }} x {{ product.largo }} {{ product.unidad_Dimensiones }}<sup>3</sup>
-                </span>
-              </td>
-              <td class="align-middle text-center">
-                <span class="text-xs font-weight-bold">{{ product.peso }}</span>
-              </td>
-              <td class="align-middle text-center">
-                <soft-badge :color="[product.enAlmacen ? 'success' : 'danger']" variant="gradient" size="sm"
-                  >Existencia</soft-badge
-                >
+                <div class="d-flex px-2">
+                  <div class="my-auto">
+                    <span class="mb-0 text-sm">{{ rack.filas }}</span>
+                  </div>
+                </div>
               </td>
               <td class="align-middle">
+                <div class="d-flex px-2">
+                  <div class="my-auto">
+                    <span class="mb-0 text-sm">{{ rack.columnas }}</span>
+                  </div>
+                </div>
+              </td>
+              <td class="align-middle">
+                <div class="d-flex px-2">
+                  <div class="my-auto">
+                    <span class="mb-0 text-sm">{{ rack.alto }} x {{ rack.ancho }} x {{ rack.largo }} {{ rack.unidad_Dimensiones }}<sup>3</sup></span>
+                  </div>
+                </div>
+              </td>
+              <td class="align-middle">
+                <router-link 
+                  :to="{ name: 'Casillero', params: { id_rack: rack.iD_Rack, pasillo:rack.pasillo, rows: rack.filas, columns: rack.columnas }}"
+                  class="text-dark font-weight-bold text-xs"
+                >
+                  <i class="fa fa-eye">&nbsp;&nbsp;Ver Casilleros</i>
+                </router-link>
                 <span>&nbsp;|&nbsp;</span>
                 <a
-                  @click="$emit('emit-product-edit', product)"
+                  @click="$emit('emit-rack-edit', rack)"
                   href="#"
                   class="text-dark font-weight-bold text-xs"
                   data-toggle="tooltip"
-                  data-original-title="Editar producto"
+                  data-original-title="Editar rack"
                   >
                   <i class="fa fa-pencil-alt">&nbsp;&nbsp;Editar</i>
                 </a>
                 <span>&nbsp;|&nbsp;</span>
                 <a
-                  @click="confirmDelete(product.iD_Producto)"
+                  @click="confirmDelete(rack.iD_Rack)"
                   href="#"
                   class="text-danger font-weight-bold text-xs"
                   data-toggle="tooltip"
-                  data-original-title="Delete product"
+                  data-original-title="Delete rack"
                   >
                   <i class="fa fa-trash-o">&nbsp;&nbsp;Borrar</i>
                 </a>
@@ -109,35 +115,36 @@
 </template>
 
 <script>
-import SoftBadge from '@/components/SoftBadge.vue';
 import SoftAlert from '@/components/SoftAlert.vue';
 import SoftButton from '@/components/SoftButton.vue';
 import { API_URL } from '@/config';
 import axios from 'axios';
+import { RouterLink } from 'vue-router';
 
 export default {
-  name: "inventory-table",
+  name: "rack-table",
   components: {
-    SoftBadge,
     SoftAlert,
-    SoftButton
-  },
+    SoftButton,
+    RouterLink
+},
   data() {
     return {
+      showModal: false,
       showConfirm: false,
-      productToDelete: null,
-      products: [],
+      rackToDelete: null,
+      racks: [],
       error_msg: ''
     };
   },
   mounted() {
-    this.getProducts();
+    this.getRacks();
   },
   methods: {
-    async getProducts() {
-      axios.get(`${API_URL}/product`)
+    async getRacks() {
+      axios.get(`${API_URL}/rack`)
         .then(res => {
-          this.products = res.data.value['productos'];
+          this.racks = res.data.value['racks'];
         })
         .catch(error => {
           if (error.response && error.response.data) {
@@ -150,19 +157,19 @@ export default {
 
     showDetail(id) {
       console.log('emit: ' + id);
-      this.$emit('product-selected', id);
+      this.$emit('rack-selected', id);
     },
 
     async confirmDelete(id) {
-      this.productToDelete = id;
+      this.rackToDelete = id;
       this.showConfirm = true;
     },
 
-    async deleteProduct() {
-      axios.delete(`${this.link}/${this.productToDelete}`)
+    async deleteRack() {
+      axios.delete(`${API_URL}/rack/${this.rackToDelete}`)
         .then(res => {
           res;
-          this.getProducts();
+          this.getRacks();
         })
         .catch(error => {
           if (error.response && error.response.data) {
@@ -170,6 +177,7 @@ export default {
           } else {
             this.error_msg = error.message;
           }
+          console.log(error);
         });
     }
   }

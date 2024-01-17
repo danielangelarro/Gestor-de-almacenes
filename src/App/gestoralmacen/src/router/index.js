@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from "vue-router";
 import { isAuthenticated, logout } from "@/store/auth"
 import Dashboard from "@/views/Dashboard.vue";
 import Inventory from "@/views/Inventario.vue";
+import Rack from "@/views/Rack.vue";
+import Entrada from "@/views/Entrada.vue";
 import Tables from "@/views/Tables.vue";
 import Cliente from "@/views/Client.vue";
 import Proveedor from "@/views/Proveedor.vue";
@@ -11,7 +13,7 @@ import Profile from "@/views/Profile.vue";
 import Rtl from "@/views/Rtl.vue";
 import SignIn from "@/views/SignIn.vue";
 import SignUp from "@/views/SignUp.vue";
-import DetailProductCard from "@/views/components/DetailProductCard.vue";
+import CasilleroTable from "@/views/components/CasilleroTable.vue" ;
 
 const routes = [
   {
@@ -41,9 +43,21 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
-    path: '/detalle/:id',
-    name: 'DetalleProducto',
-    component: DetailProductCard,
+    path: "/rack",
+    name: "Rack",
+    component: Rack,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: "/entry",
+    name: "Entrada",
+    component: Entrada,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/casilleros/:id_rack/:pasillo/:rows/:columns',
+    name: 'Casillero',
+    component: CasilleroTable,
     props: true,
     meta: { requiresAuth: true }
   },

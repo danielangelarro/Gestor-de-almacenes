@@ -4,47 +4,49 @@
             <div class="list-group">
                 <div class="row mb-2 border-0">
                     <div class="col">
-                        <h6 class="mb-0 text-sm">Nombre</h6>
+                        <h6 class="mb-0 text-sm">Pasillo</h6>
                         <soft-input
-                            :value="nombre"
-                            @input="event => nombre = event.target.value"
-                            id="nombre"
+                            :value="pasillo"
+                            @input="event => pasillo = event.target.value"
+                            id="pasillo"
                             type="text"
-                            placeholder="Nombre"
-                            name="nombre"
+                            placeholder="Pasillo"
+                            name="pasillo"
+                            rows="3"
+                        ></soft-input>
+                    </div>
+                    
+                    <div class="col">
+                        <h6 class="mb-0 text-sm">Cantidad de Filas</h6>
+                        <soft-input
+                            :value="filas"
+                            @input="event => filas = event.target.value"
+                            id="filas"
+                            type="number"
+                            placeholder="Cantidad de Filas"
+                            name="filas"
+                            rows="3"
+                        ></soft-input>
+                    </div>
+                    
+                    <div class="col">
+                        <h6 class="mb-0 text-sm">Cantidad de Columnas</h6>
+                        <soft-input
+                            :value="columnas"
+                            @input="event => columnas = event.target.value"
+                            id="columnas"
+                            type="number"
+                            placeholder="Cantidad de Columnas"
+                            name="columnas"
                             rows="3"
                         ></soft-input>
                     </div>
                 </div>
 
                 <div class="row mb-2 border-0">
-                    <div class="col">
-                        <h6 class="mb-0 text-sm">Descripci&oacute;n</h6>
-                        <soft-textarea
-                            :value="descripcion"
-                            @input="event => descripcion = event.target.value"
-                            rows="3"
-                            id="descripcion"
-                            type="text"
-                            placeholder="Descripci&oacute;n"
-                            name="descripcion"
-                        ></soft-textarea>
-                    </div>
+                    <h1 class="mb-4 text-sm text-center">PROPIEDADES DE LOS CASILLEROS</h1>
                 </div>
-                
-                <div class="row mb-2 border-0">
-                    <div class="col">
-                        <h6 class="mb-0 text-sm">Tipo</h6>
-                        <soft-input
-                            :value="tipo"
-                            @input="event => tipo = event.target.value"
-                            id="tipo"
-                            type="text"
-                            placeholder="-----"
-                            name="Tipo"
-                        ></soft-input>
-                    </div>
-                </div>
+
                 <div class="row mb-2 border-0">
                     <div class="col">
                         <h6 class="mb-0 text-sm">Alto</h6>
@@ -99,7 +101,7 @@
                 <div class="row mb-2 border-0">
                     <div class="col">
                         <h6 class="mb-0 text-sm">Unidad Dimensiones</h6>
-                        <select v-model="unidad_Dimensiones">
+                        <select class="input" v-model="unidad_Dimensiones">
                             <option disabled value="">Seleccione una unidad de medida</option>
                             <option>cm</option>
                             <option>m</option>
@@ -113,7 +115,7 @@
                 <span class="text-sm">{{ error_msg }}</span>
             </soft-alert>
 
-            <soft-button @click="addProducts">Guardar</soft-button>
+            <soft-button @click="addRacks">Guardar</soft-button>
             <span>&nbsp;&nbsp;</span>
             <soft-button color="danger" @click="show_conditional=false;">Cancelar</soft-button>
         </div>
@@ -128,13 +130,12 @@
 <script>
 import SoftButton from "@/components/SoftButton.vue";
 import SoftInput from "@/components/SoftInput.vue";
-import SoftTextarea from "@/components/SoftTextarea.vue";
 import SoftAlert from "@/components/SoftAlert.vue";
 import { API_URL } from '@/config';
 import axios from 'axios';
 
 export default {
-    name: "create-product-card",
+    name: "create-rack-card",
     props: {
         show: {
             type: Boolean,
@@ -145,49 +146,46 @@ export default {
         SoftAlert,
         SoftButton,
         SoftInput,
-        SoftTextarea
     },
     data() {
         return {
-            nombre: "",
-            descripcion: "",
-            tipo: "",
+            pasillo: "",
+            filas: "",
+            columnas: "",
+            peso: 0,
             alto: 0,
             ancho: 0,
             largo: 0,
             unidad_Dimensiones: "",
-            peso: 0,
-            enAlmacen: true,
             show_conditional: this.show,
             error_msg: ''
         };
     },
     methods: {
-        async addProducts() {
-            axios.post(`${API_URL}/product`, {
-                nombre: this.nombre,
-                descripcion: this.descripcion,
-                tipo: this.tipo,
+        async addRacks() {
+            axios.post(`${API_URL}/rack`, {
+                pasillo: this.pasillo,
+                filas: this.filas,
+                columnas: this.columnas,
+                peso_Maximo: this.peso,
                 alto: this.alto,
                 ancho: this.ancho,
                 largo: this.largo,
-                unidad_Dimensiones: this.unidad_Dimensiones,
-                peso: this.peso,
-                enAlmacen: this.enAlmacen
+                unidad_Dimensiones: this.unidad_Dimensiones
             })
                 .then(res => {
                     res;
-                    this.nombre = "",
-                    this.descripcion = "",
-                    this.tipo = "",
-                    this.alto = 0,
-                    this.ancho = 0,
-                    this.largo = 0,
-                    this.unidad_Dimensiones = "",
-                    this.peso = 0,
+                    this.pasillo = "";
+                    this.filas = "";
+                    this.columnas = "";
+                    this.peso = 0;
+                    this.alto = 0;
+                    this.ancho = 0;
+                    this.largo = 0;
+                    this.unidad_Dimensiones = "";
                     this.show_conditional = false;
                     
-                    this.$emit('product-added');
+                    this.$emit('rack-added');
                 })
                 .catch(error => {
                     if (error.response && error.response.data) {
@@ -195,6 +193,7 @@ export default {
                     } else {
                         this.error_msg = error.message;
                     }
+                    console.log(error);
                 });
         },
     }

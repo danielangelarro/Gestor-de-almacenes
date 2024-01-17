@@ -6,6 +6,7 @@ namespace GestorDeAlmacenes.Application.Casilleros.Commands.Add;
 
 public record AddCasilleroCommands(
    Guid ID_Rack,
+   long Index,
    float Area,
    float Peso_Maximo,
    float Alto,

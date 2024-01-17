@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
 {
     [DbContext(typeof(GestorDeAlmacenesDBContext))]
-    [Migration("20240103211059_NormalizateProductTable")]
-    partial class NormalizateProductTable
+    [Migration("20240117130738_AddAuthorAndProductoNameFieldToEntradaAndSalidaTable")]
+    partial class AddAuthorAndProductoNameFieldToEntradaAndSalidaTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,14 +43,14 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                     b.Property<Guid>("ID_Rack")
                         .HasColumnType("uuid");
 
+                    b.Property<long>("Index")
+                        .HasColumnType("bigint");
+
                     b.Property<float>("Largo")
                         .HasColumnType("real");
 
                     b.Property<float>("Peso_Maximo")
                         .HasColumnType("real");
-
-                    b.Property<Guid>("RackID_Rack")
-                        .HasColumnType("uuid");
 
                     b.Property<string>("Unidad_Dimensiones")
                         .IsRequired()
@@ -58,7 +58,7 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
 
                     b.HasKey("ID_Casillero");
 
-                    b.HasIndex("RackID_Rack");
+                    b.HasIndex("ID_Rack");
 
                     b.ToTable("Casilleros");
                 });
@@ -103,23 +103,25 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                     b.Property<Guid>("ID_Usuario")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Autor")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<int>("Cantidad")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("ProductoID_Producto")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("UsuarioID_User")
-                        .HasColumnType("uuid");
+                    b.Property<string>("Producto_Name")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("ID_Entrada", "ID_Producto", "ID_Usuario");
 
-                    b.HasIndex("ProductoID_Producto");
+                    b.HasIndex("ID_Producto");
 
-                    b.HasIndex("UsuarioID_User");
+                    b.HasIndex("ID_Usuario");
 
                     b.ToTable("Entradas");
                 });
@@ -139,12 +141,9 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                     b.Property<Guid>("ID_Producto")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ProductoID_Producto")
-                        .HasColumnType("uuid");
-
                     b.HasKey("ID_Merma");
 
-                    b.HasIndex("ProductoID_Producto");
+                    b.HasIndex("ID_Producto");
 
                     b.ToTable("Mermas");
                 });
@@ -206,12 +205,6 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                     b.Property<float>("Peso")
                         .HasColumnType("real");
 
-                    b.Property<float>("Precio_Total")
-                        .HasColumnType("real");
-
-                    b.Property<float>("Precio_Unitario")
-                        .HasColumnType("real");
-
                     b.Property<string>("Tipo")
                         .IsRequired()
                         .HasColumnType("text");
@@ -260,7 +253,36 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<float>("Alto")
+                        .HasColumnType("real");
+
+                    b.Property<float>("Ancho")
+                        .HasColumnType("real");
+
+                    b.Property<int>("Cantidad_Casillas")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Columnas")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Filas")
+                        .HasColumnType("integer");
+
+                    b.Property<float>("Largo")
+                        .HasColumnType("real");
+
                     b.Property<string>("Pasillo")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<float>("Peso_Maximo")
+                        .HasColumnType("real");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Unidad_Dimensiones")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -280,40 +302,39 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                     b.Property<Guid>("ID_Usuario")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Autor")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<int>("Cantidad")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("ProductoID_Producto")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("UsuarioID_User")
-                        .HasColumnType("uuid");
+                    b.Property<string>("Producto_Name")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("ID_Salida", "ID_Producto", "ID_Usuario");
 
-                    b.HasIndex("ProductoID_Producto");
+                    b.HasIndex("ID_Producto");
 
-                    b.HasIndex("UsuarioID_User");
+                    b.HasIndex("ID_Usuario");
 
                     b.ToTable("Salidas");
                 });
 
             modelBuilder.Entity("GestorDeAlmacenes.Application.Entities.Ubicacion", b =>
                 {
-                    b.Property<int>("ID_Producto")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ID_Producto")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("ID_Casillero")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ID_Casillero")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Cantidad")
                         .HasColumnType("integer");
-
-                    b.Property<Guid>("CasilleroID_Casillero")
-                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("Fecha_Caducidad")
                         .HasColumnType("timestamp with time zone");
@@ -321,14 +342,9 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                     b.Property<DateTime>("Fecha_Llegada")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("ProductoID_Producto")
-                        .HasColumnType("uuid");
-
                     b.HasKey("ID_Producto", "ID_Casillero");
 
-                    b.HasIndex("CasilleroID_Casillero");
-
-                    b.HasIndex("ProductoID_Producto");
+                    b.HasIndex("ID_Casillero");
 
                     b.ToTable("Ubicaciones");
                 });
@@ -363,7 +379,7 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                 {
                     b.HasOne("GestorDeAlmacenes.Application.Entities.Rack", "Rack")
                         .WithMany("Casilleros")
-                        .HasForeignKey("RackID_Rack")
+                        .HasForeignKey("ID_Rack")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -374,13 +390,13 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                 {
                     b.HasOne("GestorDeAlmacenes.Application.Entities.Producto", "Producto")
                         .WithMany("Entradas")
-                        .HasForeignKey("ProductoID_Producto")
+                        .HasForeignKey("ID_Producto")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("GestorDeAlmacenes.Application.Entities.User", "Usuario")
                         .WithMany("Entradas")
-                        .HasForeignKey("UsuarioID_User")
+                        .HasForeignKey("ID_Usuario")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -393,7 +409,7 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                 {
                     b.HasOne("GestorDeAlmacenes.Application.Entities.Producto", "Producto")
                         .WithMany("Mermas")
-                        .HasForeignKey("ProductoID_Producto")
+                        .HasForeignKey("ID_Producto")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -415,13 +431,13 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                 {
                     b.HasOne("GestorDeAlmacenes.Application.Entities.Producto", "Producto")
                         .WithMany("Salidas")
-                        .HasForeignKey("ProductoID_Producto")
+                        .HasForeignKey("ID_Producto")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("GestorDeAlmacenes.Application.Entities.User", "Usuario")
                         .WithMany("Salidas")
-                        .HasForeignKey("UsuarioID_User")
+                        .HasForeignKey("ID_Usuario")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -434,13 +450,13 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                 {
                     b.HasOne("GestorDeAlmacenes.Application.Entities.Casillero", "Casillero")
                         .WithMany("Ubicaciones")
-                        .HasForeignKey("CasilleroID_Casillero")
+                        .HasForeignKey("ID_Casillero")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("GestorDeAlmacenes.Application.Entities.Producto", "Producto")
                         .WithMany("Ubicaciones")
-                        .HasForeignKey("ProductoID_Producto")
+                        .HasForeignKey("ID_Producto")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

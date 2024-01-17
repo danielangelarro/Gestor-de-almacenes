@@ -55,7 +55,14 @@ public class RackController : ApiController
     public async Task<IActionResult> AddRack(RackUploadRequest request)
     {
         var query = new AddRackCommands(
-            request.Pasillo
+            request.Pasillo,
+            request.Filas,
+            request.Columnas,
+            request.Peso_Maximo,
+            request.Alto,
+            request.Ancho,
+            request.Largo,
+            request.Unidad_Dimensiones
         );
 
         ErrorOr<RackResult> rackResult = await _mediator.Send(query);
@@ -71,7 +78,14 @@ public class RackController : ApiController
     {
         var query = new UpdateRackCommands(
             request.ID_Rack,
-            request.Pasillo
+            request.Pasillo,
+            request.Filas,
+            request.Columnas,
+            request.Peso_Maximo,
+            request.Alto,
+            request.Ancho,
+            request.Largo,
+            request.Unidad_Dimensiones
         );
 
         ErrorOr<RackResult> rackResult = await _mediator.Send(query);

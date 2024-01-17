@@ -113,14 +113,12 @@
                     
                     <div class="col">
                         <h6 class="mb-0 text-sm">Unidad Dimensiones</h6>
-                        <soft-input
-                            :value="params.unidad_Dimensiones"
-                            @input="event => params.unidad_Dimensiones = event.target.value"
-                            id="unidad_Dimensiones"
-                            type="text"
-                            placeholder="Unidad Dimensiones"
-                            name="unidad_Dimensiones"
-                        ></soft-input>
+                        <select v-model="params.unidad_Dimensiones">
+                            <option disabled value="">Seleccione una unidad de medida</option>
+                            <option>cm</option>
+                            <option>m</option>
+                            <option>ft</option>
+                        </select>
                     </div>
                     
                     <div class="col">
@@ -186,7 +184,6 @@ export default {
         async editProducts() {
             axios.put(`${API_URL}/product`, this.params)
                 .then(res => {
-                    console.log(this.params.enAlmacen);
                     res;
                     this.params.nombre = "";
                     this.params.descripcion = "";

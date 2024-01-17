@@ -35,17 +35,12 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                     ID_Producto = table.Column<Guid>(type: "uuid", nullable: false),
                     Nombre = table.Column<string>(type: "text", nullable: false),
                     Descripcion = table.Column<string>(type: "text", nullable: false),
-                    Precio_Total = table.Column<float>(type: "real", nullable: false),
-                    Precio_Unitario = table.Column<float>(type: "real", nullable: false),
-                    Cantidad = table.Column<int>(type: "integer", nullable: false),
                     Tipo = table.Column<string>(type: "text", nullable: false),
                     Alto = table.Column<float>(type: "real", nullable: false),
                     Ancho = table.Column<float>(type: "real", nullable: false),
                     Largo = table.Column<float>(type: "real", nullable: false),
                     Unidad_Dimensiones = table.Column<string>(type: "text", nullable: false),
                     Peso = table.Column<float>(type: "real", nullable: false),
-                    Fecha_Llegada = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Fecha_Caducidad = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EnAlmacen = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
@@ -75,7 +70,13 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                 columns: table => new
                 {
                     ID_Rack = table.Column<Guid>(type: "uuid", nullable: false),
-                    Pasillo = table.Column<string>(type: "text", nullable: false)
+                    Pasillo = table.Column<string>(type: "text", nullable: false),
+                    Cantidad_Casillas = table.Column<int>(type: "integer", nullable: false),
+                    Peso_Maximo = table.Column<float>(type: "real", nullable: false),
+                    Alto = table.Column<float>(type: "real", nullable: false),
+                    Ancho = table.Column<float>(type: "real", nullable: false),
+                    Largo = table.Column<float>(type: "real", nullable: false),
+                    Unidad_Dimensiones = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -105,15 +106,14 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                     ID_Merma = table.Column<Guid>(type: "uuid", nullable: false),
                     ID_Producto = table.Column<Guid>(type: "uuid", nullable: false),
                     Cantidad = table.Column<int>(type: "integer", nullable: false),
-                    Fecha_Caducidad = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ProductoID_Producto = table.Column<Guid>(type: "uuid", nullable: false)
+                    Fecha_Caducidad = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Mermas", x => x.ID_Merma);
                     table.ForeignKey(
-                        name: "FK_Mermas_Productos_ProductoID_Producto",
-                        column: x => x.ProductoID_Producto,
+                        name: "FK_Mermas_Productos_ID_Producto",
+                        column: x => x.ID_Producto,
                         principalTable: "Productos",
                         principalColumn: "ID_Producto",
                         onDelete: ReferentialAction.Cascade);
@@ -130,15 +130,14 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                     Alto = table.Column<float>(type: "real", nullable: false),
                     Ancho = table.Column<float>(type: "real", nullable: false),
                     Largo = table.Column<float>(type: "real", nullable: false),
-                    Unidad_Dimensiones = table.Column<string>(type: "text", nullable: false),
-                    RackID_Rack = table.Column<Guid>(type: "uuid", nullable: false)
+                    Unidad_Dimensiones = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Casilleros", x => x.ID_Casillero);
                     table.ForeignKey(
-                        name: "FK_Casilleros_Racks_RackID_Rack",
-                        column: x => x.RackID_Rack,
+                        name: "FK_Casilleros_Racks_ID_Rack",
+                        column: x => x.ID_Rack,
                         principalTable: "Racks",
                         principalColumn: "ID_Rack",
                         onDelete: ReferentialAction.Cascade);
@@ -152,22 +151,20 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                     ID_Producto = table.Column<Guid>(type: "uuid", nullable: false),
                     ID_Usuario = table.Column<Guid>(type: "uuid", nullable: false),
                     Cantidad = table.Column<int>(type: "integer", nullable: false),
-                    Fecha = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ProductoID_Producto = table.Column<Guid>(type: "uuid", nullable: false),
-                    UsuarioID_User = table.Column<Guid>(type: "uuid", nullable: false)
+                    Fecha = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Entradas", x => new { x.ID_Entrada, x.ID_Producto, x.ID_Usuario });
                     table.ForeignKey(
-                        name: "FK_Entradas_Productos_ProductoID_Producto",
-                        column: x => x.ProductoID_Producto,
+                        name: "FK_Entradas_Productos_ID_Producto",
+                        column: x => x.ID_Producto,
                         principalTable: "Productos",
                         principalColumn: "ID_Producto",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Entradas_Users_UsuarioID_User",
-                        column: x => x.UsuarioID_User,
+                        name: "FK_Entradas_Users_ID_Usuario",
+                        column: x => x.ID_Usuario,
                         principalTable: "Users",
                         principalColumn: "ID_User",
                         onDelete: ReferentialAction.Cascade);
@@ -202,22 +199,20 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                     ID_Producto = table.Column<Guid>(type: "uuid", nullable: false),
                     ID_Usuario = table.Column<Guid>(type: "uuid", nullable: false),
                     Cantidad = table.Column<int>(type: "integer", nullable: false),
-                    Fecha = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ProductoID_Producto = table.Column<Guid>(type: "uuid", nullable: false),
-                    UsuarioID_User = table.Column<Guid>(type: "uuid", nullable: false)
+                    Fecha = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Salidas", x => new { x.ID_Salida, x.ID_Producto, x.ID_Usuario });
                     table.ForeignKey(
-                        name: "FK_Salidas_Productos_ProductoID_Producto",
-                        column: x => x.ProductoID_Producto,
+                        name: "FK_Salidas_Productos_ID_Producto",
+                        column: x => x.ID_Producto,
                         principalTable: "Productos",
                         principalColumn: "ID_Producto",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Salidas_Users_UsuarioID_User",
-                        column: x => x.UsuarioID_User,
+                        name: "FK_Salidas_Users_ID_Usuario",
+                        column: x => x.ID_Usuario,
                         principalTable: "Users",
                         principalColumn: "ID_User",
                         onDelete: ReferentialAction.Cascade);
@@ -227,48 +222,48 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                 name: "Ubicaciones",
                 columns: table => new
                 {
-                    ID_Producto = table.Column<int>(type: "integer", nullable: false),
-                    ID_Casillero = table.Column<int>(type: "integer", nullable: false),
+                    ID_Producto = table.Column<Guid>(type: "uuid", nullable: false),
+                    ID_Casillero = table.Column<Guid>(type: "uuid", nullable: false),
                     Cantidad = table.Column<int>(type: "integer", nullable: false),
-                    ProductoID_Producto = table.Column<Guid>(type: "uuid", nullable: false),
-                    CasilleroID_Casillero = table.Column<Guid>(type: "uuid", nullable: false)
+                    Fecha_Llegada = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Fecha_Caducidad = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Ubicaciones", x => new { x.ID_Producto, x.ID_Casillero });
                     table.ForeignKey(
-                        name: "FK_Ubicaciones_Casilleros_CasilleroID_Casillero",
-                        column: x => x.CasilleroID_Casillero,
+                        name: "FK_Ubicaciones_Casilleros_ID_Casillero",
+                        column: x => x.ID_Casillero,
                         principalTable: "Casilleros",
                         principalColumn: "ID_Casillero",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Ubicaciones_Productos_ProductoID_Producto",
-                        column: x => x.ProductoID_Producto,
+                        name: "FK_Ubicaciones_Productos_ID_Producto",
+                        column: x => x.ID_Producto,
                         principalTable: "Productos",
                         principalColumn: "ID_Producto",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Casilleros_RackID_Rack",
+                name: "IX_Casilleros_ID_Rack",
                 table: "Casilleros",
-                column: "RackID_Rack");
+                column: "ID_Rack");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Entradas_ProductoID_Producto",
+                name: "IX_Entradas_ID_Producto",
                 table: "Entradas",
-                column: "ProductoID_Producto");
+                column: "ID_Producto");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Entradas_UsuarioID_User",
+                name: "IX_Entradas_ID_Usuario",
                 table: "Entradas",
-                column: "UsuarioID_User");
+                column: "ID_Usuario");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Mermas_ProductoID_Producto",
+                name: "IX_Mermas_ID_Producto",
                 table: "Mermas",
-                column: "ProductoID_Producto");
+                column: "ID_Producto");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Photos_AuthID_User",
@@ -276,24 +271,19 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                 column: "AuthID_User");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Salidas_ProductoID_Producto",
+                name: "IX_Salidas_ID_Producto",
                 table: "Salidas",
-                column: "ProductoID_Producto");
+                column: "ID_Producto");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Salidas_UsuarioID_User",
+                name: "IX_Salidas_ID_Usuario",
                 table: "Salidas",
-                column: "UsuarioID_User");
+                column: "ID_Usuario");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ubicaciones_CasilleroID_Casillero",
+                name: "IX_Ubicaciones_ID_Casillero",
                 table: "Ubicaciones",
-                column: "CasilleroID_Casillero");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Ubicaciones_ProductoID_Producto",
-                table: "Ubicaciones",
-                column: "ProductoID_Producto");
+                column: "ID_Casillero");
         }
 
         /// <inheritdoc />

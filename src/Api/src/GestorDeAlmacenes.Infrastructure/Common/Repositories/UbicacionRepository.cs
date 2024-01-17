@@ -30,6 +30,16 @@ public class UbicacionRepository : IUbicacionRepository
         return await _context.Ubicaciones.ToListAsync();
     }
 
+    public async Task<IEnumerable<Ubicacion>> GetAllUbicacionesByCasilleroAsync(Guid iD_Casillero)
+    {
+        return await _context.Ubicaciones.Where(u => u.ID_Casillero == iD_Casillero).ToListAsync();
+    }
+
+    public async Task<IEnumerable<Ubicacion>> GetAllUbicacionesByProductoAsync(Guid iD_Producto)
+    {
+        return await _context.Ubicaciones.Where(u => u.ID_Producto == iD_Producto).ToListAsync();
+    }
+
     public async Task<Ubicacion> GetUbicacionByIdAsync(Guid id)
     {
         return await _context.Ubicaciones.FindAsync(id);

@@ -44,7 +44,7 @@ public class CasilleroController : ApiController
     {
         var query = new GetCasilleroByIdQuery(id);
 
-        ErrorOr<CasilleroResult> casilleroResult = await _mediator.Send(query);
+        ErrorOr<CasilleroResultInfo> casilleroResult = await _mediator.Send(query);
         
         return casilleroResult.Match(
             result => Ok(casilleroResult),
@@ -83,6 +83,7 @@ public class CasilleroController : ApiController
     {
         var query = new AddCasilleroCommands(
             request.ID_Rack,
+            -1,
             request.Area,
             request.Peso_Maximo,
             request.Alto,

@@ -3,6 +3,7 @@ using System;
 using GestorDeAlmacenes.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
 {
     [DbContext(typeof(GestorDeAlmacenesDBContext))]
-    partial class GestorDeAlmacenesDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240105205214_AddDimensionsFieldsToRackTable")]
+    partial class AddDimensionsFieldsToRackTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,9 +42,6 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
 
                     b.Property<Guid>("ID_Rack")
                         .HasColumnType("uuid");
-
-                    b.Property<long>("Index")
-                        .HasColumnType("bigint");
 
                     b.Property<float>("Largo")
                         .HasColumnType("real");
@@ -100,19 +100,11 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                     b.Property<Guid>("ID_Usuario")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Autor")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<int>("Cantidad")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Producto_Name")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.HasKey("ID_Entrada", "ID_Producto", "ID_Usuario");
 
@@ -275,10 +267,6 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                     b.Property<float>("Peso_Maximo")
                         .HasColumnType("real");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("Unidad_Dimensiones")
                         .IsRequired()
                         .HasColumnType("text");
@@ -299,19 +287,11 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                     b.Property<Guid>("ID_Usuario")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Autor")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<int>("Cantidad")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Producto_Name")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.HasKey("ID_Salida", "ID_Producto", "ID_Usuario");
 

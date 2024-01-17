@@ -6,4 +6,4 @@ namespace GestorDeAlmacenes.Application.Casilleros.Query.GetCasilleroById;
 
 public record GetCasilleroByIdQuery(
     Guid Id
-) : IRequest<ErrorOr<CasilleroResult>>;
+) : IRequest<ErrorOr<CasilleroResultInfo>>;
