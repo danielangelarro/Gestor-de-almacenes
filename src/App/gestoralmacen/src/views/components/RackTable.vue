@@ -80,7 +80,7 @@
               </td>
               <td class="align-middle">
                 <router-link 
-                  :to="{ name: 'Casillero', params: { id_rack: rack.iD_Rack, pasillo:rack.pasillo, rows: rack.filas, columns: rack.columnas }}"
+                  :to="{ name: 'Casillero', params: { id_rack: rack.iD_Rack, pasillo: rack.pasillo, rows: rack.filas, columns: rack.columnas }}"
                   class="text-dark font-weight-bold text-xs"
                 >
                   <i class="fa fa-eye">&nbsp;&nbsp;Ver Casilleros</i>
@@ -156,7 +156,6 @@ export default {
     },
 
     showDetail(id) {
-      console.log('emit: ' + id);
       this.$emit('rack-selected', id);
     },
 
@@ -177,7 +176,6 @@ export default {
           } else {
             this.error_msg = error.message;
           }
-          console.log(error);
         });
     }
   }

@@ -33,6 +33,8 @@ public class UpdateProductCommandsHandler : IRequestHandler<UpdateProductCommand
         product.Unidad_Dimensiones = command.Unidad_Dimensiones;
         product.Peso = command.Peso;
         product.EnAlmacen = command.EnAlmacen;
+        product.Precio_Entrada = command.Precio_Entrada;
+        product.Precio_Salida = command.Precio_Salida;
 
        await _productRepository.UpdateProductoAsync(product);
        

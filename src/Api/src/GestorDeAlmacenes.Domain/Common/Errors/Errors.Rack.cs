@@ -10,5 +10,10 @@ public static partial class Errors
             code: "Rack.NotFound",
             description: "El rack no existe."
         );
+        
+        public static Error NotFoundWait => Error.NotFound(
+            code: "Rack.NotFoundWait",
+            description: "El rack de espera no existe."
+        );
     }
 }

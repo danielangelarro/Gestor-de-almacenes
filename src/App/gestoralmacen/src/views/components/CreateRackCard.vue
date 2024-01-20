@@ -193,7 +193,6 @@ export default {
                     } else {
                         this.error_msg = error.message;
                     }
-                    console.log(error);
                 });
         },
     }

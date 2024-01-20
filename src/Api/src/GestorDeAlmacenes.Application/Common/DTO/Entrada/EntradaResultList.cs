@@ -4,5 +4,5 @@ using System.Collections.Generic;
 
 namespace GestorDeAlmacenes.Application.DTO.Entradas
 {
-    public record EntradaResultList(ICollection<ITransaction> entradas);
+    public record EntradaResultList(ICollection<Movimientos> entradas);
 }

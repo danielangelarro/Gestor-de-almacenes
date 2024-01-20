@@ -1,14 +1,8 @@
 <template>
   <div class="card mb-4">
-    <soft-alert v-show="showConfirm" color="dark" class="font-weight-light m-4">
-      <p>Está seguro de querer borrar este rack?</p>
-      <soft-button @click="deleteRack(); showConfirm = false;">Confirmar</soft-button>
-      <span>&nbsp;</span>
-      <soft-button color="danger" @click="showConfirm = false;">Cancelar</soft-button>
-    </soft-alert>
 
     <div class="card-header pb-0">
-      <h6>Racks</h6>
+      <h6>Entradas de productos</h6>
     </div>
     <soft-alert v-if="error_msg != ''" class="font-weight-light" color="danger" dismissible>
         <span class="text-sm">{{ error_msg }}</span>
@@ -21,28 +15,47 @@
               <th
                 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
               >
-                Pasillo
+                Producto
               </th>
               <th
                 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
               >
-                Cantidad de Filas
+                Proveedor
               </th>
               <th
                 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
               >
-                Cantidad de Columnas
+                Autorizaci&oacute;n
               </th>
               <th
                 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
               >
-                Dimensi&oacute;n de los Casilleros
+                Cantidad
               </th>
-              <th></th>
+              <th
+                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >
+                Precio Unitario
+              </th>
+              <th
+                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >
+                Precio Total
+              </th>
+              <th
+                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >
+                Fecha de Entrada
+              </th>
+              <th
+                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+              >
+                Fecha de Caducidad
+              </th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="rack in this.racks" :key="rack['iD_Rack']">
+            <tr v-for="entrada in this.entradas" :key="entrada['iD_Entrada']">
               <td>
                 <div class="d-flex px-2">
                   <div>
@@ -53,58 +66,58 @@
                     />
                   </div>
                   <div class="my-auto">
-                    <h6 class="mb-0 text-sm">{{ rack.pasillo }}</h6>
+                    <h6 class="mb-0 text-sm">{{ entrada.producto_Name }}</h6>
                   </div>
                 </div>
               </td>
               <td>
                 <div class="d-flex px-2">
                   <div class="my-auto">
-                    <span class="mb-0 text-sm">{{ rack.filas }}</span>
+                    <span class="mb-0 text-sm">{{ entrada.proveedor_Name }}</span>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="d-flex px-2">
+                  <div class="my-auto">
+                    <span class="mb-0 text-sm">{{ entrada.autorization }}</span>
                   </div>
                 </div>
               </td>
               <td class="align-middle">
                 <div class="d-flex px-2">
                   <div class="my-auto">
-                    <span class="mb-0 text-sm">{{ rack.columnas }}</span>
+                    <span class="mb-0 text-sm">{{ entrada.cantidad }}</span>
                   </div>
                 </div>
               </td>
               <td class="align-middle">
                 <div class="d-flex px-2">
                   <div class="my-auto">
-                    <span class="mb-0 text-sm">{{ rack.alto }} x {{ rack.ancho }} x {{ rack.largo }} {{ rack.unidad_Dimensiones }}<sup>3</sup></span>
+                    <span class="mb-0 text-sm">{{ entrada.precio_Unidad }}</span>
                   </div>
                 </div>
               </td>
               <td class="align-middle">
-                <router-link 
-                  :to="{ name: 'Casillero', params: { id_rack: rack.iD_Rack, pasillo:rack.pasillo, rows: rack.filas, columns: rack.columnas }}"
-                  class="text-dark font-weight-bold text-xs"
-                >
-                  <i class="fa fa-eye">&nbsp;&nbsp;Ver Casilleros</i>
-                </router-link>
-                <span>&nbsp;|&nbsp;</span>
-                <a
-                  @click="$emit('emit-rack-edit', rack)"
-                  href="#"
-                  class="text-dark font-weight-bold text-xs"
-                  data-toggle="tooltip"
-                  data-original-title="Editar rack"
-                  >
-                  <i class="fa fa-pencil-alt">&nbsp;&nbsp;Editar</i>
-                </a>
-                <span>&nbsp;|&nbsp;</span>
-                <a
-                  @click="confirmDelete(rack.iD_Rack)"
-                  href="#"
-                  class="text-danger font-weight-bold text-xs"
-                  data-toggle="tooltip"
-                  data-original-title="Delete rack"
-                  >
-                  <i class="fa fa-trash-o">&nbsp;&nbsp;Borrar</i>
-                </a>
+                <div class="d-flex px-2">
+                  <div class="my-auto">
+                    <span class="mb-0 text-sm">{{ entrada.precio_Unidad * entrada.cantidad }}</span>
+                  </div>
+                </div>
+              </td>
+              <td class="align-middle">
+                <div class="d-flex px-2">
+                  <div class="my-auto">
+                    <span class="mb-0 text-sm">{{ formatDate(entrada.fecha) }}</span>
+                  </div>
+                </div>
+              </td>
+              <td class="align-middle">
+                <div class="d-flex px-2">
+                  <div class="my-auto">
+                    <span class="mb-0 text-sm">{{ formatDate(entrada.fecha_Caducidad) }}</span>
+                  </div>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -116,35 +129,36 @@
 
 <script>
 import SoftAlert from '@/components/SoftAlert.vue';
-import SoftButton from '@/components/SoftButton.vue';
 import { API_URL } from '@/config';
 import axios from 'axios';
-import { RouterLink } from 'vue-router';
 
 export default {
-  name: "rack-table",
+  name: "entrada-table",
   components: {
-    SoftAlert,
-    SoftButton,
-    RouterLink
+    SoftAlert
 },
   data() {
     return {
       showModal: false,
-      showConfirm: false,
-      rackToDelete: null,
-      racks: [],
+      entradas: [],
       error_msg: ''
     };
   },
   mounted() {
-    this.getRacks();
+    this.getEntradas();
   },
   methods: {
-    async getRacks() {
-      axios.get(`${API_URL}/rack`)
+    formatDate(fecha) {
+      let date = new Date(fecha);
+      let opciones = { year: 'numeric', month: 'long', day: 'numeric'};
+
+      return date.toLocaleDateString('es-ES', opciones);
+    },
+
+    async getEntradas() {
+      axios.get(`${API_URL}/entradaandsalida/entrada`)
         .then(res => {
-          this.racks = res.data.value['racks'];
+          this.entradas = res.data.value['entradas'];
         })
         .catch(error => {
           if (error.response && error.response.data) {
@@ -152,32 +166,6 @@ export default {
           } else {
             this.error_msg = error.message;
           }
-        });
-    },
-
-    showDetail(id) {
-      console.log('emit: ' + id);
-      this.$emit('rack-selected', id);
-    },
-
-    async confirmDelete(id) {
-      this.rackToDelete = id;
-      this.showConfirm = true;
-    },
-
-    async deleteRack() {
-      axios.delete(`${API_URL}/rack/${this.rackToDelete}`)
-        .then(res => {
-          res;
-          this.getRacks();
-        })
-        .catch(error => {
-          if (error.response && error.response.data) {
-            this.error_msg = error.response.data.title;
-          } else {
-            this.error_msg = error.message;
-          }
-          console.log(error);
         });
     }
   }

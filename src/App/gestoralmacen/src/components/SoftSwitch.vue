@@ -7,7 +7,7 @@
       type="checkbox"
       :name="name"
       :checked="checked"
-      @change="$emit('change', $event.target.value)"
+      @change.prevent="$emit('change', $event.target.value)"
     />
     <label class="form-check-label" :class="labelClass" :for="id">
       <slot />

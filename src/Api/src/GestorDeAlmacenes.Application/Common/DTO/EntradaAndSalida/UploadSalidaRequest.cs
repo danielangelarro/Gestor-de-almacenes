@@ -8,6 +8,8 @@ namespace GestorDeAlmacenes.Application.DTO.EntradaAndSalidas
         Guid ID_Producto,
         Guid ID_Usuario,
         int Cantidad,
-        DateTime Fecha
+        float Precio_Unidad,
+        DateTime Fecha,
+        string Token
     );
 }

@@ -11,6 +11,7 @@ using GestorDeAlmacenes.Application.Casilleros.Commands.Update;
 using GestorDeAlmacenes.Application.Casilleros.Commands.Add;
 using GestorDeAlmacenes.Application.Casilleros.Query.GetCasilleroByRackId;
 using GestorDeAlmacenes.Application.Common.DTO.Casillero;
+using GestorDeAlmacenes.Application.Casilleros.Query.GetCasilleroWait;
 
 
 namespace GestorDeAlmacenes.API.Controllers;
@@ -61,6 +62,19 @@ public class CasilleroController : ApiController
         
         return casilleroResultList.Match(
             result => Ok(casilleroResultList),
+            errors => Problem(errors)
+        );
+    }
+    
+    [HttpGet("wait/")]
+    public async Task<IActionResult> GetCasilleroWait()
+    {
+        var query = new GetCasilleroWaitQuery();
+
+        ErrorOr<CasilleroResult> casilleroResult = await _mediator.Send(query);
+        
+        return casilleroResult.Match(
+            result => Ok(casilleroResult),
             errors => Problem(errors)
         );
     }

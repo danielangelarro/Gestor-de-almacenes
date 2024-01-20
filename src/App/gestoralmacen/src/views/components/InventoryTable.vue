@@ -41,6 +41,16 @@
               <th
                 class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2"
               >
+                Precio de Compra
+              </th>
+              <th
+                class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2"
+              >
+                Precio de Venta
+              </th>
+              <th
+                class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2"
+              >
                 En Almac&eacute;n
               </th>
               <th></th>
@@ -72,6 +82,12 @@
               </td>
               <td class="align-middle text-center">
                 <span class="text-xs font-weight-bold">{{ product.peso }}</span>
+              </td>
+              <td class="align-middle text-center">
+                <span class="text-xs font-weight-bold">{{ product.precio_Entrada }}</span>
+              </td>
+              <td class="align-middle text-center">
+                <span class="text-xs font-weight-bold">{{ product.precio_Salida }}</span>
               </td>
               <td class="align-middle text-center">
                 <soft-badge :color="[product.enAlmacen ? 'success' : 'danger']" variant="gradient" size="sm"
@@ -149,7 +165,6 @@ export default {
     },
 
     showDetail(id) {
-      console.log('emit: ' + id);
       this.$emit('product-selected', id);
     },
 

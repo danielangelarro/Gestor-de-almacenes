@@ -53,8 +53,29 @@
                             @input="event => params.tipo = event.target.value"
                             id="tipo"
                             type="text"
-                            placeholder="-----"
                             name="Tipo"
+                        ></soft-input>
+                    </div>
+                    
+                    <div class="col">
+                        <h6 class="mb-0 text-sm">Precio de Compra</h6>
+                        <soft-input
+                            :value="params.precio_Entrada"
+                            @input="event => params.precio_Entrada = event.target.value"
+                            id="precio_Entrada"
+                            type="number"
+                            name="precio_Entrada"
+                        ></soft-input>
+                    </div>
+                    
+                    <div class="col">
+                        <h6 class="mb-0 text-sm">Precio de Venta</h6>
+                        <soft-input
+                            :value="params.precio_Salida"
+                            @input="event => params.precio_Salida = event.target.value"
+                            id="precio_Salida"
+                            type="number"
+                            name="precio_Salida"
                         ></soft-input>
                     </div>
                 </div>
@@ -193,6 +214,8 @@ export default {
                     this.params.largo = 0;
                     this.params.unidad_Dimensiones = "";
                     this.params.peso = 0;
+                    this.params.precio_Entrada = 0;
+                    this.params.precio_Salida = 0;
                     this.params.enAlmacen = false;
                     
                     this.$emit('product-edited');

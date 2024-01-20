@@ -5,6 +5,7 @@ namespace GestorDeAlmacenes.Application.Common.Interfaces;
 public interface IProductoRepository
 {
   Task<Producto> GetProductoByIdAsync(Guid id);
+  Task<int> GetProductoCountAsync();
   Task<List<Producto>> GetAllProductosAsync();
   Task AddProductoAsync(Producto producto);
   Task UpdateProductoAsync(Producto producto);

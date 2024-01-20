@@ -30,6 +30,8 @@ public class AddProductCommandsHandler : IRequestHandler<AddProductCommands, Err
             Largo = command.Largo,
             Unidad_Dimensiones = command.Unidad_Dimensiones,
             Peso = command.Peso,
+            Precio_Entrada = command.Precio_Entrada,
+            Precio_Salida = command.Precio_Salida
        };
 
        await _productRepository.AddProductoAsync(product);

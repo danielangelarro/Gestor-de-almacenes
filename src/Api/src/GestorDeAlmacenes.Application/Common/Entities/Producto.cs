@@ -15,6 +15,8 @@ public class Producto
    public float Largo { get; set; }
    public string Unidad_Dimensiones { get; set; }
    public float Peso { get; set; }
+   public float Precio_Entrada { get; set; }
+   public float Precio_Salida { get; set; }
    public bool EnAlmacen { get; set; }
 
    // Relaciones

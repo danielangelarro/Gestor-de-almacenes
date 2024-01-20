@@ -11,6 +11,7 @@ public class Entrada : ITransaction
    public Guid ID_Entrada { get; set; }
    public Guid ID_Producto { get; set; }
    public Guid ID_Usuario { get; set; }
+   public string Proveedor_Name { get; set; }
    public string Autor { get; set; }
    public string Producto_Name { get; set; }
    public int Cantidad { get; set; }
@@ -23,5 +24,5 @@ public class Entrada : ITransaction
    
    [ForeignKey("ID_Usuario")]
    [JsonIgnore]
-   public User Usuario { get; set; }
+   public Proveedor Proveedor { get; set; }
 }

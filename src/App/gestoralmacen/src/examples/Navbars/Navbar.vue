@@ -212,7 +212,6 @@ export default {
   },
   mounted() {
     this.authenticated = isAuthenticated();
-    console.log(this.authenticated);
   },
   methods: {
     ...mapMutations(["navbarMinimize", "toggleConfigurator"]),

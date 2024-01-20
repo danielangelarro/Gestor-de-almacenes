@@ -114,11 +114,20 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Proveedor_Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("UserID_User")
+                        .HasColumnType("uuid");
+
                     b.HasKey("ID_Entrada", "ID_Producto", "ID_Usuario");
 
                     b.HasIndex("ID_Producto");
 
                     b.HasIndex("ID_Usuario");
+
+                    b.HasIndex("UserID_User");
 
                     b.ToTable("Entradas");
                 });
@@ -143,6 +152,66 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                     b.HasIndex("ID_Producto");
 
                     b.ToTable("Mermas");
+                });
+
+            modelBuilder.Entity("GestorDeAlmacenes.Application.Entities.Movimientos", b =>
+                {
+                    b.Property<Guid>("ID_Movimiento")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Autorization")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Cantidad")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Cliente_Name")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("Fecha_Caducidad")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("ID_Cliente")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ID_Producto")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ID_Proveedor")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ID_Usuario")
+                        .HasColumnType("uuid");
+
+                    b.Property<float>("Precio_Unidad")
+                        .HasColumnType("real");
+
+                    b.Property<string>("Producto_Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Proveedor_Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Tipo")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
+
+                    b.HasKey("ID_Movimiento");
+
+                    b.HasIndex("ID_Cliente");
+
+                    b.HasIndex("ID_Producto");
+
+                    b.HasIndex("ID_Proveedor");
+
+                    b.HasIndex("ID_Usuario");
+
+                    b.ToTable("Movimientos");
                 });
 
             modelBuilder.Entity("GestorDeAlmacenes.Application.Entities.Photo", b =>
@@ -200,6 +269,12 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                         .HasColumnType("text");
 
                     b.Property<float>("Peso")
+                        .HasColumnType("real");
+
+                    b.Property<float>("Precio_Entrada")
+                        .HasColumnType("real");
+
+                    b.Property<float>("Precio_Salida")
                         .HasColumnType("real");
 
                     b.Property<string>("Tipo")
@@ -306,6 +381,10 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                     b.Property<int>("Cantidad")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Cliente_Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("timestamp with time zone");
 
@@ -313,25 +392,31 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("UserID_User")
+                        .HasColumnType("uuid");
+
                     b.HasKey("ID_Salida", "ID_Producto", "ID_Usuario");
 
                     b.HasIndex("ID_Producto");
 
                     b.HasIndex("ID_Usuario");
 
+                    b.HasIndex("UserID_User");
+
                     b.ToTable("Salidas");
                 });
 
             modelBuilder.Entity("GestorDeAlmacenes.Application.Entities.Ubicacion", b =>
                 {
-                    b.Property<Guid>("ID_Producto")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ID_Casillero")
+                    b.Property<Guid>("ID_Ubicacion")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<int>("Cantidad")
                         .HasColumnType("integer");
+
+                    b.Property<bool>("Confirmar_Guardado")
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime>("Fecha_Caducidad")
                         .HasColumnType("timestamp with time zone");
@@ -339,11 +424,47 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                     b.Property<DateTime>("Fecha_Llegada")
                         .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("ID_Producto", "ID_Casillero");
+                    b.Property<Guid>("ID_Casillero")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ID_Producto")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("ID_Ubicacion");
 
                     b.HasIndex("ID_Casillero");
 
+                    b.HasIndex("ID_Producto");
+
                     b.ToTable("Ubicaciones");
+                });
+
+            modelBuilder.Entity("GestorDeAlmacenes.Application.Entities.Ubicacion_Salida", b =>
+                {
+                    b.Property<Guid>("ID_Ubicacion_Salida")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ID_Salida")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ID_Ubicacion")
+                        .HasColumnType("uuid");
+
+                    b.Property<long>("Indice_Casillero")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Pasillo")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("ID_Ubicacion_Salida");
+
+                    b.HasIndex("ID_Salida");
+
+                    b.HasIndex("ID_Ubicacion");
+
+                    b.ToTable("Ubicacion_Salidas");
                 });
 
             modelBuilder.Entity("GestorDeAlmacenes.Application.Entities.User", b =>
@@ -391,15 +512,19 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GestorDeAlmacenes.Application.Entities.User", "Usuario")
-                        .WithMany("Entradas")
+                    b.HasOne("GestorDeAlmacenes.Application.Entities.Proveedor", "Proveedor")
+                        .WithMany()
                         .HasForeignKey("ID_Usuario")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("GestorDeAlmacenes.Application.Entities.User", null)
+                        .WithMany("Entradas")
+                        .HasForeignKey("UserID_User");
+
                     b.Navigation("Producto");
 
-                    b.Navigation("Usuario");
+                    b.Navigation("Proveedor");
                 });
 
             modelBuilder.Entity("GestorDeAlmacenes.Application.Entities.Merma", b =>
@@ -411,6 +536,37 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                         .IsRequired();
 
                     b.Navigation("Producto");
+                });
+
+            modelBuilder.Entity("GestorDeAlmacenes.Application.Entities.Movimientos", b =>
+                {
+                    b.HasOne("GestorDeAlmacenes.Application.Entities.Cliente", "Cliente")
+                        .WithMany()
+                        .HasForeignKey("ID_Cliente");
+
+                    b.HasOne("GestorDeAlmacenes.Application.Entities.Producto", "Producto")
+                        .WithMany()
+                        .HasForeignKey("ID_Producto")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GestorDeAlmacenes.Application.Entities.Proveedor", "Proveedor")
+                        .WithMany()
+                        .HasForeignKey("ID_Proveedor");
+
+                    b.HasOne("GestorDeAlmacenes.Application.Entities.User", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("ID_Usuario")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
+
+                    b.Navigation("Producto");
+
+                    b.Navigation("Proveedor");
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("GestorDeAlmacenes.Application.Entities.Photo", b =>
@@ -432,15 +588,19 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GestorDeAlmacenes.Application.Entities.User", "Usuario")
-                        .WithMany("Salidas")
+                    b.HasOne("GestorDeAlmacenes.Application.Entities.Cliente", "Cliente")
+                        .WithMany()
                         .HasForeignKey("ID_Usuario")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Producto");
+                    b.HasOne("GestorDeAlmacenes.Application.Entities.User", null)
+                        .WithMany("Salidas")
+                        .HasForeignKey("UserID_User");
 
-                    b.Navigation("Usuario");
+                    b.Navigation("Cliente");
+
+                    b.Navigation("Producto");
                 });
 
             modelBuilder.Entity("GestorDeAlmacenes.Application.Entities.Ubicacion", b =>
@@ -462,7 +622,31 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                     b.Navigation("Producto");
                 });
 
+            modelBuilder.Entity("GestorDeAlmacenes.Application.Entities.Ubicacion_Salida", b =>
+                {
+                    b.HasOne("GestorDeAlmacenes.Application.Entities.Movimientos", "Salida")
+                        .WithMany("Ubicaciones")
+                        .HasForeignKey("ID_Salida")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GestorDeAlmacenes.Application.Entities.Ubicacion", "Ubicacion")
+                        .WithMany()
+                        .HasForeignKey("ID_Ubicacion")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Salida");
+
+                    b.Navigation("Ubicacion");
+                });
+
             modelBuilder.Entity("GestorDeAlmacenes.Application.Entities.Casillero", b =>
+                {
+                    b.Navigation("Ubicaciones");
+                });
+
+            modelBuilder.Entity("GestorDeAlmacenes.Application.Entities.Movimientos", b =>
                 {
                     b.Navigation("Ubicaciones");
                 });

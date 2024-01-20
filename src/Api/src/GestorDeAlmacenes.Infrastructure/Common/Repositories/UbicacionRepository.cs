@@ -1,3 +1,4 @@
+using System.Transactions;
 using GestorDeAlmacenes.Application.Common.Interfaces;
 using GestorDeAlmacenes.Application.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,20 @@ public class UbicacionRepository : IUbicacionRepository
 
     public async Task AddUbicacionAsync(Ubicacion ubicacion)
     {
-        await _context.Ubicaciones.AddAsync(ubicacion);
+        if (await _context.Ubicaciones.Where(u => 
+            u.ID_Producto == ubicacion.ID_Producto && u.ID_Casillero == ubicacion.ID_Casillero &&
+            u.Fecha_Llegada == ubicacion.Fecha_Llegada && u.Fecha_Caducidad == ubicacion.Fecha_Caducidad
+            ).FirstOrDefaultAsync() is Ubicacion ubicacion_exist)
+        {
+            ubicacion_exist.Cantidad += ubicacion.Cantidad;
+            
+            _context.Ubicaciones.Update(ubicacion_exist);
+        }
+        else
+        {
+            await _context.Ubicaciones.AddAsync(ubicacion);
+        }
+
         await _context.SaveChangesAsync();
     }
 
@@ -25,17 +39,17 @@ public class UbicacionRepository : IUbicacionRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Ubicacion>> GetAllUbicacionesAsync()
+    public async Task<ICollection<Ubicacion>> GetAllUbicacionesAsync()
     {
         return await _context.Ubicaciones.ToListAsync();
     }
 
-    public async Task<IEnumerable<Ubicacion>> GetAllUbicacionesByCasilleroAsync(Guid iD_Casillero)
+    public async Task<ICollection<Ubicacion>> GetAllUbicacionesByCasilleroAsync(Guid iD_Casillero)
     {
         return await _context.Ubicaciones.Where(u => u.ID_Casillero == iD_Casillero).ToListAsync();
     }
 
-    public async Task<IEnumerable<Ubicacion>> GetAllUbicacionesByProductoAsync(Guid iD_Producto)
+    public async Task<ICollection<Ubicacion>> GetAllUbicacionesByProductoAsync(Guid iD_Producto)
     {
         return await _context.Ubicaciones.Where(u => u.ID_Producto == iD_Producto).ToListAsync();
     }

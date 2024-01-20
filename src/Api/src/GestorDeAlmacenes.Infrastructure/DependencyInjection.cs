@@ -3,6 +3,7 @@ using GestorDeAlmacenes.Application.Common.Interfaces.Authentication;
 using GestorDeAlmacenes.Application.Common.Interfaces.Repository;
 using GestorDeAlmacenes.Application.Common.Interfaces.Services;
 using GestorDeAlmacenes.Application.Entities;
+using GestorDeAlmacenes.Application.Services;
 using GestorDeAlmacenes.Infrastructure.Authentication;
 using GestorDeAlmacenes.Infrastructure.Repositories;
 using GestorDeAlmacenes.Infrastructure.Services;
@@ -50,6 +51,7 @@ public static class DependencyInjection
         services.AddScoped<ICasilleroRepository, CasilleroRepository>();
         services.AddScoped<IClienteRepository, ClienteRepository>();
         services.AddScoped<IEntradaRepository, EntradaRepository>();
+        services.AddScoped<IMovimientoRepository, MovimientoRepository>();
         services.AddScoped<IMermaRepository, MermaRepository>();
         services.AddScoped<IPhotoRepository, PhotoRepository>();
         services.AddScoped<IProductoRepository, ProductoRepository>();
@@ -58,6 +60,9 @@ public static class DependencyInjection
         services.AddScoped<ISalidaRepository, SalidaRepository>();
         services.AddScoped<IUbicacionRepository, UbicacionRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IUbicacionSalidaRepository, UbicacionSalidaRepository>();
+
+        services.AddScoped<IGetCurrentUserLoginService, GetCurrentUserLoginService>();
 
         Task.Run(
             () => InitializeDatabase(services.BuildServiceProvider().GetRequiredService<GestorDeAlmacenesDBContext>())
@@ -69,6 +74,7 @@ public static class DependencyInjection
     public static async Task InitializeDatabase(GestorDeAlmacenesDBContext context)
     {
         RackRepository rackRepository = new RackRepository(context);
+        CasilleroRepository casilleroRepository = new CasilleroRepository(context);
 
         if (await rackRepository.GetMermaRacksAsync() is not Rack merma_rack)
         {
@@ -93,7 +99,7 @@ public static class DependencyInjection
         {
             wait_rack = new Rack{
                 ID_Rack = Guid.NewGuid(),
-                Pasillo = "Merma",
+                Pasillo = "Wait",
                 Cantidad_Casillas = 1,
                 Filas = 1,
                 Columnas = 1,
@@ -106,6 +112,21 @@ public static class DependencyInjection
             };
 
             await rackRepository.AddRackAsync(wait_rack);
+
+            var casillero = new Casillero
+            {
+                ID_Casillero = Guid.NewGuid(),
+                ID_Rack = wait_rack.ID_Rack,
+                Index = 1,
+                Area = float.MaxValue,
+                Peso_Maximo = wait_rack.Peso_Maximo,
+                Alto = wait_rack.Alto,
+                Ancho = wait_rack.Ancho,
+                Largo = wait_rack.Largo,
+                Unidad_Dimensiones = wait_rack.Unidad_Dimensiones
+            };
+
+            await casilleroRepository.AddCasilleroAsync(casillero);
         }
     }
 }

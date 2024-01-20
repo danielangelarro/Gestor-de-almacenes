@@ -2,5 +2,8 @@ using GestorDeAlmacenes.Application.Entities;
 
 namespace GestorDeAlmacenes.Application.DTO.Salidas
 {
-    public record SalidaResult(Salida salida);
+    public record SalidaResult(
+        Movimientos salida, 
+        ICollection<Ubicacion_Salida> ubicaciones
+    );
 }

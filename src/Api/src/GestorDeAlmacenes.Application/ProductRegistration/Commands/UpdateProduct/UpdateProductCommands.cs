@@ -14,6 +14,8 @@ public record UpdateProductCommands(
    float Largo,
    string Unidad_Dimensiones,
    float Peso,
+   float Precio_Entrada,
+   float Precio_Salida,
    bool EnAlmacen
 ) : IRequest<ErrorOr<ProductResult>>;
 

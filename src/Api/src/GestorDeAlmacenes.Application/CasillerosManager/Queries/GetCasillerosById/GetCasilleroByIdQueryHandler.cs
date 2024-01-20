@@ -4,6 +4,7 @@ using GestorDeAlmacenes.Application.Entities;
 using GestorDeAlmacenes.Domain.Common.Errors;
 using MediatR;
 using ErrorOr;
+using GestorDeAlmacenes.Application.DTO.Product;
 
 namespace GestorDeAlmacenes.Application.Casilleros.Query.GetCasilleroById;
 
@@ -27,17 +28,30 @@ public class GetCasilleroByIdQueryHandler : IRequestHandler<GetCasilleroByIdQuer
             return Errors.Casillero.NotFound;
         }
 
-        Console.WriteLine("casilleros OK");
         IEnumerable<Ubicacion> ubicaciones = await _ubicacionRepository.GetAllUbicacionesByCasilleroAsync(query.Id);
-        Console.WriteLine("ubicaciones OK");
-        List<Producto> productos = new List<Producto>();
+        List<ResultUbicacion> productos = new List<ResultUbicacion>();
         float capacidad_Peso = 0, capacidad_Volumen = 0;
 
         foreach (var ubicacion in ubicaciones)
         {
             Producto producto = await _productoRepository.GetProductoByIdAsync(ubicacion.ID_Producto);
             
-            productos.Add(producto);
+            productos.Add(new ResultUbicacion(
+                ID_Ubicacion: ubicacion.ID_Ubicacion,
+                ID_Producto: ubicacion.ID_Producto,
+                ID_Casillero: ubicacion.ID_Casillero,
+                Nombre: producto.Nombre,
+                Tipo: producto.Tipo,
+                Alto: producto.Alto,
+                Largo: producto.Largo,
+                Ancho: producto.Ancho,
+                Unidad_Dimensions: producto.Unidad_Dimensiones,
+                Peso: producto.Peso,
+                Cantidad: ubicacion.Cantidad,
+                Fecha_Llegada: ubicacion.Fecha_Llegada,
+                Fecha_Caducidad: ubicacion.Fecha_Caducidad,
+                Confirmar_Guardado: ubicacion.Confirmar_Guardado
+            ));
 
             capacidad_Peso += producto.Peso;
             capacidad_Volumen += producto.Ancho * producto.Alto * producto.Largo;

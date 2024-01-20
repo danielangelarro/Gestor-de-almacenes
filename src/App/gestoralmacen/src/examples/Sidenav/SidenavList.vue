@@ -26,7 +26,21 @@
         </sidenav-collapse>
       </li>
       <li class="nav-item">
+        <sidenav-collapse navText="Rack de Espera" :to="{ name: 'RackWait' }">
+          <template #icon>
+            <office />
+          </template>
+        </sidenav-collapse>
+      </li>
+      <li class="nav-item">
         <sidenav-collapse navText="Entradas" :to="{ name: 'Entrada' }">
+          <template #icon>
+            <office />
+          </template>
+        </sidenav-collapse>
+      </li>
+      <li class="nav-item">
+        <sidenav-collapse navText="Salidas" :to="{ name: 'Salida' }">
           <template #icon>
             <office />
           </template>

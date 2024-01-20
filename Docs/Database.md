@@ -27,8 +27,6 @@ CREATE TABLE Productos (
     Largo DECIMAL(10,2),
     Unidad_Dimensiones ENUM('cm', 'm', 'ft'),
     Peso DECIMAL(10,2),
-    Fecha_Llegada DATE,
-    Fecha_Caducidad DATE,
     EnAlmacen BOOLEAN DEFAULT FALSE
 );
 
@@ -53,6 +51,8 @@ CREATE TABLE Ubicaciones (
     ID_Producto INT,
     ID_Casillero INT,
     Cantidad INT,
+    Fecha_Llegada DATE,
+    Fecha_Caducidad DATE,
     FOREIGN KEY (ID_Producto) REFERENCES Productos(ID_Producto),
     FOREIGN KEY (ID_Casillero) REFERENCES Casilleros(ID_Casillero)
 );

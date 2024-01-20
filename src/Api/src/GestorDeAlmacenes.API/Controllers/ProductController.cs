@@ -9,6 +9,9 @@ using GestorDeAlmacenes.Application.Product.Query.GetProductById;
 using GestorDeAlmacenes.Application.Product.Commands.Delete;
 using GestorDeAlmacenes.Application.Product.Commands.Update;
 using GestorDeAlmacenes.Application.Product.Commands.Add;
+using GestorDeAlmacenes.Application.Product.Query.GetWaitProducts;
+using GestorDeAlmacenes.Application.Product.Commands.Move;
+using GestorDeAlmacenes.Application.Product.Commands.Confirm;
 
 
 namespace GestorDeAlmacenes.API.Controllers;
@@ -36,6 +39,19 @@ public class ProductController : ApiController
             errors => Problem(errors)
         );
     }
+    
+    [HttpGet("wait")]
+    public async Task<IActionResult> GetWaitProducts()
+    {
+        var query = new GetWaitProductsQuery();
+
+        ErrorOr<ProductResultUbicacionList> productResultUbicacionList = await _mediator.Send(query);
+        
+        return productResultUbicacionList.Match(
+            result => Ok(productResultUbicacionList),
+            errors => Problem(errors)
+        );
+    }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProductById(Guid id)
@@ -50,6 +66,37 @@ public class ProductController : ApiController
         );
     }
     
+    [HttpPost("transaction/move")]
+    public async Task<IActionResult> MoveProduct(ProductMoveUpload request)
+    {
+        var query = new MoveProductCommands(
+            request.Ubicacion,
+            request.ID_Casillero_New,
+            request.Cantidad
+        );
+
+        ErrorOr<UbicacionResult> ubicacionResult = await _mediator.Send(query);
+        
+        return ubicacionResult.Match(
+            result => Ok(ubicacionResult),
+            errors => Problem(errors)
+        );
+    }
+    
+    [HttpPost("transaction/confirm")]
+    public async Task<IActionResult> ConfirmProduct(ProductConfirmUpload request)
+    {
+        var query = new ConfirmProductCommands(
+            request.Ubicacion
+        );
+
+        ErrorOr<UbicacionResult> ubicacionResult = await _mediator.Send(query);
+        
+        return ubicacionResult.Match(
+            result => Ok(ubicacionResult),
+            errors => Problem(errors)
+        );
+    }
     
     [HttpPost]
     public async Task<IActionResult> AddProduct(ProductUploadRequest request)
@@ -62,7 +109,9 @@ public class ProductController : ApiController
             request.Ancho,
             request.Largo,
             request.Unidad_Dimensiones,
-            request.Peso
+            request.Peso,
+            request.Precio_Entrada,
+            request.Precio_Salida
         );
 
         ErrorOr<ProductResult> productResult = await _mediator.Send(query);
@@ -86,6 +135,8 @@ public class ProductController : ApiController
             request.Largo,
             request.Unidad_Dimensiones,
             request.Peso,
+            request.Precio_Entrada,
+            request.Precio_Salida,
             request.EnAlmacen
         );
 

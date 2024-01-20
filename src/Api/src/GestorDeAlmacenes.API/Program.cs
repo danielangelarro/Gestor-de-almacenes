@@ -11,6 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services
         .AddApplication()
         .AddInfrastructure(builder.Configuration)
+        
+        .AddHttpContextAccessor()
 
         .ConfigureAutheticationServices(builder.Configuration)
         .SwaggerDocumentatiobService();

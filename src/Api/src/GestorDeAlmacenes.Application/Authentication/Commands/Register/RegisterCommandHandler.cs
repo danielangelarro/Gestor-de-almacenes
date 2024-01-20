@@ -1,5 +1,4 @@
 using GestorDeAlmacenes.Domain.Common.Errors;
-using GestorDeAlmacenes.Application.Authentication.Commands.Register;
 using GestorDeAlmacenes.Application.Common.Interfaces.Authentication;
 using GestorDeAlmacenes.Application.Common.Interfaces.Repository;
 using GestorDeAlmacenes.Application.Entities;
@@ -36,11 +35,6 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<A
 
         if (!validationResult.IsValid)
         {
-            foreach (var item in validationResult.Errors)
-            {
-                Console.WriteLine(item.ErrorMessage);
-                
-            }
             return Errors.Model.ModelsInvalid;
         }
 

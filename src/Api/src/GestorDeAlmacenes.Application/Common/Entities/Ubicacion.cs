@@ -7,11 +7,15 @@ namespace GestorDeAlmacenes.Application.Entities;
 
 public class Ubicacion
 {
+   [Key]
+   public Guid ID_Ubicacion { get; set; }
+   
    public Guid ID_Producto { get; set; }
    public Guid ID_Casillero { get; set; }   
    public int Cantidad { get; set; }
    public DateTime Fecha_Llegada { get; set; }
    public DateTime Fecha_Caducidad { get; set; }
+   public bool Confirmar_Guardado { get; set; }
 
    // Relaciones
    [ForeignKey("ID_Producto")]

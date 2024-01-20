@@ -10,6 +10,7 @@ public class Salida : ITransaction
    public Guid ID_Salida { get; set; }
    public Guid ID_Producto { get; set; }
    public Guid ID_Usuario { get; set; }
+   public string Cliente_Name { get; set; }
    public string Autor { get; set; }
    public string Producto_Name { get; set; }
    public int Cantidad { get; set; }
@@ -22,5 +23,5 @@ public class Salida : ITransaction
 
    [ForeignKey("ID_Usuario")]
    [JsonIgnore]
-   public User Usuario { get; set; }
+   public Cliente Cliente { get; set; }
 }

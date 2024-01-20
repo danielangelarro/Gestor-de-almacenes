@@ -40,8 +40,29 @@
                             @input="event => tipo = event.target.value"
                             id="tipo"
                             type="text"
-                            placeholder="-----"
                             name="Tipo"
+                        ></soft-input>
+                    </div>
+                    
+                    <div class="col">
+                        <h6 class="mb-0 text-sm">Precio de Compra</h6>
+                        <soft-input
+                            :value="precio_entrada"
+                            @input="event => precio_entrada = event.target.value"
+                            id="precio_entrada"
+                            type="number"
+                            name="precio_entrada"
+                        ></soft-input>
+                    </div>
+                    
+                    <div class="col">
+                        <h6 class="mb-0 text-sm">Precio de Venta</h6>
+                        <soft-input
+                            :value="precio_salida"
+                            @input="event => precio_salida = event.target.value"
+                            id="precio_salida"
+                            type="number"
+                            name="precio_salida"
                         ></soft-input>
                     </div>
                 </div>
@@ -56,7 +77,7 @@
                             placeholder="Alto"
                             name="alto"
                         ></soft-input>
-                    </div>    
+                    </div>
                 
                     <div class="col">
                         <h6 class="mb-0 text-sm">Largo</h6>
@@ -157,6 +178,8 @@ export default {
             largo: 0,
             unidad_Dimensiones: "",
             peso: 0,
+            precio_entrada: 0,
+            precio_salida: 0,
             enAlmacen: true,
             show_conditional: this.show,
             error_msg: ''
@@ -173,18 +196,22 @@ export default {
                 largo: this.largo,
                 unidad_Dimensiones: this.unidad_Dimensiones,
                 peso: this.peso,
+                precio_Entrada: this.precio_entrada,
+                precio_Salida: this.precio_salida,
                 enAlmacen: this.enAlmacen
             })
                 .then(res => {
                     res;
-                    this.nombre = "",
-                    this.descripcion = "",
-                    this.tipo = "",
-                    this.alto = 0,
-                    this.ancho = 0,
-                    this.largo = 0,
-                    this.unidad_Dimensiones = "",
-                    this.peso = 0,
+                    this.nombre = "";
+                    this.descripcion = "";
+                    this.tipo = "";
+                    this.alto = 0;
+                    this.ancho = 0;
+                    this.largo = 0;
+                    this.unidad_Dimensiones = "";
+                    this.peso = 0;
+                    this.precio_entrada = 0;
+                    this.precio_salida = 0;
                     this.show_conditional = false;
                     
                     this.$emit('product-added');

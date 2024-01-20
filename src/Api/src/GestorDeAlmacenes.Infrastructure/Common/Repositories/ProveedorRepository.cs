@@ -30,12 +30,17 @@ public class ProveedorRepository : IProveedorRepository
        return await _context.Proveedores.ToListAsync();
    }
 
-   public async Task<Proveedor> GetProveedorByIdAsync(Guid id)
+   public async Task<Proveedor> GetProveedorByIdAsync(Guid? id)
    {
        return await _context.Proveedores.FindAsync(id);
    }
 
-   public async Task UpdateProveedorAsync(Proveedor proveedor)
+    public async Task<int> GetProveedorCountAsync()
+    {
+        return await _context.Proveedores.CountAsync();
+    }
+
+    public async Task UpdateProveedorAsync(Proveedor proveedor)
    {
        _context.Proveedores.Update(proveedor);
        await _context.SaveChangesAsync();

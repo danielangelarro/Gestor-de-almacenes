@@ -12,6 +12,8 @@ public record AddProductCommands(
    float Ancho,
    float Largo,
    string Unidad_Dimensiones,
-   float Peso
+   float Peso,
+   float Precio_Entrada,
+   float Precio_Salida
 ) : IRequest<ErrorOr<ProductResult>>;
 

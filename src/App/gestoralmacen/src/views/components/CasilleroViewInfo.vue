@@ -17,12 +17,12 @@
                 <mini-statistics-card
                   :title="{ 
                     text: 'Estado', 
-                    value: 'Disponible' //TODO -  Hacer funcion de disponibilidad
+                    value: `${disponibleCasillero}`
                   }"
                   :icon="{
                     name: 'ni ni-money-coins',
                     color: 'text-white',
-                    background: 'success',
+                    background: `${getStyleDisponible}`,
                   }"
                 />
               </div>
@@ -56,6 +56,7 @@
             <div class="col-xl-8 col-sm-6">
               <inventory-casillero-table
                 :products="productos"
+                @emit-product-confirm="productConfirm"
               >
               </inventory-casillero-table>
             </div>
@@ -90,6 +91,34 @@ export default {
       unidad_medida: ''
     }
   },
+  computed: {
+    disponibleCasillero() {
+      for (const product of this.productos) {
+        if (!product.confirmar_Guardado) {
+          return "Pendiente";
+        }
+      }
+
+      if (this.capacidad_Volumen === this.volumen_Maximo || this.capacidad_Peso === this.casillero.peso_Maximo) {
+        return "Ocupado";
+      }
+
+      return "Disponible";
+    },
+
+    getStyleDisponible() {
+      
+      if (this.disponibleCasillero === "Pendiente") {
+        return "warning";
+      }
+      
+      if (this.disponibleCasillero === "Ocupado") {
+        return "danger";
+      }
+      
+      return "success";
+    }
+  },
   watch: {
     show: async function (newShow){
 
@@ -107,6 +136,7 @@ export default {
         this.selectedItems.push(item);
       }
     },
+
     emitSelectedItems() {
       this.$emit('close');
       this.$emit('selected-items', this.selectedItems);
@@ -121,8 +151,22 @@ export default {
           this.capacidad_Volumen = res.data.value.capacidad_Volumen;
           this.volumen_Maximo = this.casillero.largo * this.casillero.ancho * this.casillero.alto;
           this.unidad_medida = this.casillero.unidad_Dimensiones	;
+        })
+        .catch(error => {
+          if (error.response && error.response.data) {
+            this.error_msg = error.response.data.title;
+          } else {
+            this.error_msg = error.message;
+          }
+        });
+    },
 
-          this.getProducts();
+    async productConfirm(iD_Ubicacion) {
+
+      axios.post(`${API_URL}/product/transaction/confirm`, { Ubicacion: iD_Ubicacion })
+        .then(res => {
+          res;
+          this.getCasilleroInfo();
         })
         .catch(error => {
           if (error.response && error.response.data) {

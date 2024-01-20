@@ -3,7 +3,9 @@ import { isAuthenticated, logout } from "@/store/auth"
 import Dashboard from "@/views/Dashboard.vue";
 import Inventory from "@/views/Inventario.vue";
 import Rack from "@/views/Rack.vue";
+import RackWait from "@/views/RackWait.vue";
 import Entrada from "@/views/Entrada.vue";
+import Salida from "@/views/Salida.vue";
 import Tables from "@/views/Tables.vue";
 import Cliente from "@/views/Client.vue";
 import Proveedor from "@/views/Proveedor.vue";
@@ -49,9 +51,21 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: "/rack-wait",
+    name: "RackWait",
+    component: RackWait,
+    meta: { requiresAuth: true }
+  },
+  {
     path: "/entry",
     name: "Entrada",
     component: Entrada,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: "/exit",
+    name: "Salida",
+    component: Salida,
     meta: { requiresAuth: true }
   },
   {

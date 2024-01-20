@@ -37,7 +37,12 @@ namespace GestorDeAlmacenes.Infrastructure.Repositories
           return await _context.Clientes.FindAsync(id);
       }
 
-      public async Task UpdateClienteAsync(Cliente cliente)
+        public async Task<int> GetClienteCountAsync()
+        {
+            return await _context.Clientes.CountAsync();
+        }
+
+        public async Task UpdateClienteAsync(Cliente cliente)
       {
           _context.Clientes.Update(cliente);
           await _context.SaveChangesAsync();

@@ -8,7 +8,8 @@
     </soft-alert>
 
     <div class="card-header pb-0">
-      <h6>Productos en la Casilla</h6>
+      <h6 v-if="table_title != ''">{{ table_title }}</h6>
+      <h6 v-else>Productos en la Casilla</h6>
     </div>
     <soft-alert v-if="error_msg != ''" class="font-weight-light" color="danger" dismissible>
       <span class="text-sm">{{ error_msg }}</span>
@@ -41,13 +42,23 @@
               <th
                 class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2"
               >
-                En Almac&eacute;n
+                Cantidad
               </th>
-              <th></th>
+              <th
+                class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2"
+              >
+                Fecha de Entrada
+              </th>
+              <th
+                class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2"
+              >
+                Fecha de Caducidad
+              </th>
+              <th v-show="!only_view"></th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="product in this.products" :key="product['iD_Producto']">
+            <tr v-for="product in this.products" :key="product['iD_Ubicacion']">
               <td>
                 <div class="d-flex px-2">
                   <div>
@@ -67,37 +78,46 @@
               </td>
               <td>
                 <span class="text-xs font-weight-bold">
-                  {{ product.alto }} x {{ product.ancho }} x {{ product.largo }} {{ product.unidad_Dimensiones }}<sup>3</sup>
+                  {{ product.alto }} x {{ product.ancho }} x {{ product.largo }} {{ product.unidad_Dimensions }}<sup>3</sup>
                 </span>
               </td>
               <td class="align-middle text-center">
                 <span class="text-xs font-weight-bold">{{ product.peso }}</span>
               </td>
               <td class="align-middle text-center">
-                <soft-badge :color="[product.enAlmacen ? 'success' : 'danger']" variant="gradient" size="sm"
-                  >Existencia</soft-badge
-                >
+                <span class="text-xs font-weight-bold">{{ product.cantidad }}</span>
               </td>
-              <td class="align-middle">
-                <span>&nbsp;|&nbsp;</span>
+              <td class="align-middle text-center">
+                <span class="text-xs font-weight-bold">{{ formatDate(product.fecha_Llegada) }}</span>
+              </td>
+              <td class="align-middle text-center">
+                <span class="text-xs font-weight-bold">{{ formatDate(product.fecha_Caducidad) }}</span>
+              </td>
+              <td v-show="!only_view" class="align-middle">
+                <div v-if="state_wait">
+                  
+                  <soft-switch
+                    :id="product['iD_Ubicacion']"
+                    :name="product['iD_Ubicacion']"
+
+                    @change="handleSwitchChange(product)"
+
+                    label-class="mb-0 text-body ms-3 text-truncate w-80"
+                    class="ps-0 ms-auto"
+                  >Reservar</soft-switch>
+
+                  <input v-model="product.quantity" type="number" @change="handleSwitchChange(product)">
+                </div>
+
                 <a
-                  @click="$emit('emit-product-edit', product)"
+                  v-else-if="!product.confirmar_Guardado"
+                  @click="$emit('emit-product-confirm', product['iD_Ubicacion'])"
                   href="#"
                   class="text-dark font-weight-bold text-xs"
                   data-toggle="tooltip"
                   data-original-title="Editar producto"
                   >
-                  <i class="fa fa-pencil-alt">&nbsp;&nbsp;Editar</i>
-                </a>
-                <span>&nbsp;|&nbsp;</span>
-                <a
-                  @click="confirmDelete(product.iD_Producto)"
-                  href="#"
-                  class="text-danger font-weight-bold text-xs"
-                  data-toggle="tooltip"
-                  data-original-title="Delete product"
-                  >
-                  <i class="fa fa-trash-o">&nbsp;&nbsp;Borrar</i>
+                  <i class="fa fa-floppy-o">&nbsp;|&nbsp;&nbsp;&nbsp;Confirmar</i>
                 </a>
               </td>
             </tr>
@@ -109,19 +129,34 @@
 </template>
 
 <script>
-import SoftBadge from '@/components/SoftBadge.vue';
 import SoftAlert from '@/components/SoftAlert.vue';
 import SoftButton from '@/components/SoftButton.vue';
-import axios from 'axios';
+import SoftSwitch from '@/components/SoftSwitch.vue';
 
 export default {
   name: "inventory-casillero-table",
   components: {
-    SoftBadge,
     SoftAlert,
-    SoftButton
+    SoftButton,
+    SoftSwitch
   },
   props: {
+    only_view: {
+      type: Boolean,
+      default: false
+    },
+    table_title: {
+      type: String,
+      default: ''
+    },
+    state_wait: {
+      type: Boolean,
+      default: false
+    },
+    ubicacion_old_id: {
+      type: String,
+      default: ""
+    },
     products: {
       type: Array,
       default: () => {}
@@ -136,8 +171,14 @@ export default {
   },
   methods: {
     showDetail(id) {
-      console.log('emit: ' + id);
       this.$emit('product-selected', id);
+    },
+
+    formatDate(fecha) {
+      let date = new Date(fecha);
+      let opciones = { year: 'numeric', month: 'long', day: 'numeric'};
+
+      return date.toLocaleDateString('es-ES', opciones);
     },
 
     async confirmDelete(id) {
@@ -145,20 +186,32 @@ export default {
       this.showConfirm = true;
     },
 
-    async deleteProduct() {
-      axios.delete(`${this.link}/${this.productToDelete}`)
-        .then(res => {
-          res;
-          this.getProducts();
-        })
-        .catch(error => {
-          if (error.response && error.response.data) {
-            this.error_msg = error.response.data.title;
-          } else {
-            this.error_msg = error.message;
-          }
-        });
-    }
+    handleSwitchChange(product) {
+        let quantity = product.quantity;
+        product.selected = !product.selected;
+
+        if (product.selected) {
+            if (quantity <= 0) {
+              product.quantity = 0;
+              this.error_msg = "La cantidad del producto debe ser mayor que 0 para ser seleccionado.";
+            }
+
+            else if (quantity > product.cantidad) {
+              product.quantity = 0;
+              this.error_msg = "Ha superado el límite de la cantidad de ése producto."
+            }
+
+            else {
+              this.error_msg = '';
+              this.$emit('add-product', product, quantity);
+            }
+
+        } else {  
+          product.quantity = 0;
+          this.$emit('remove-product', product, quantity);
+        }
+    },
+
   }
 };
 </script>

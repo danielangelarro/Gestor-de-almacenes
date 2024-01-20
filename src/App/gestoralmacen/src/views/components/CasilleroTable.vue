@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-4 row">
+  <div class="mt-4 p-4 row">
 
     <Teleport to="body">
       <casillero-view-info 
@@ -21,6 +21,16 @@
         @casillero-edited="getCasilleros"
         @casillero-cancel-edit="show_edit = false;"
     ></edit-casillero-card>
+    
+    <reservar-casillero-card
+        v-show="show_reservar"
+        :casilleros_params="selectedItems"
+        :id_casilleros="id_casilleros"
+        :change_selection="change_selection"
+        @casillero-edited="getCasilleros"
+        @casillero-cancel-edit="show_reservar = false;"
+        @emit-product-reserve="resetPage"
+    ></reservar-casillero-card>
 
     <div class="col-12">
       <div class="mb-4">
@@ -33,7 +43,7 @@
       </div>
     </div>
 
-    <div class="">
+    <div class="d-flex justify-content-end">
       <button 
         class="btn col-1"
         :class="btnSelectBackgroundColor"
@@ -45,6 +55,12 @@
         class="btn col-1 mx-3 btn-success"
         @click="show_edit = true"
       >Editar</button>
+      
+      <button 
+        v-show="selectedPress && !show_reservar"
+        class="btn col-1 mx-3 btn-success"
+        @click="show_reservar = true"
+      >Reservar</button>
     </div>
 
     <div class="card-body pt-0 pb-2">
@@ -68,6 +84,7 @@
 import SoftBadge from "@/components/SoftBadge.vue";
 import CasilleroViewInfo from "./CasilleroViewInfo.vue";
 import EditCasilleroCard from "./EditCasilleroCard.vue";
+import ReservarCasilleroCard from "./ReservarCasilleroCard.vue";
 import { API_URL } from '@/config';
 import axios from 'axios';
 
@@ -77,7 +94,8 @@ export default {
     components: {
         SoftBadge,
         CasilleroViewInfo,
-        EditCasilleroCard
+        EditCasilleroCard,
+        ReservarCasilleroCard
     },
     data() {
       return {
@@ -89,7 +107,9 @@ export default {
         showModal: false,
         showInfo: false,
         show_edit: false,
+        show_reservar: false,
         selectedPress: false,
+        change_selection: false,
         selectedItems: [],
         casilleros: [],
         id_casilleros: []
@@ -115,13 +135,18 @@ export default {
       }
     },
     methods: {
+        resetPage() {
+          this.getCasilleros();
+        },
+
         selectItem(item, index_casilla) {
+
           if (!this.selectedPress) {
             this.casilla = { 
               id: item.iD_Casillero,
               index: index_casilla + 1
             };
-            this.showModal = true;  
+            this.showModal = true;
             
             return;
           }
@@ -134,22 +159,25 @@ export default {
             this.selectedItems.push(item);
             this.id_casilleros.push(index_casilla);
           }
+
+          this.change_selection = !this.change_selection;
         },
+
         btnSelectedPress() {
           this.selectedPress = !this.selectedPress;
 
           if (!this.selectedPress) {
             this.show_edit = false;
+            this.show_reservar = false;
             this.selectedItems = [];
             this.id_casilleros = [];
           }
         },
+
         async getCasilleros() {
             axios.get(`${API_URL}/casillero/rack/${this.id_rack}`)
                 .then(res => {
                     this.casilleros = res.data.value['casilleros'];
-
-                    console.log(this.casilleros);
                   })
                   .catch(error => {
                     if (error.response && error.response.data) {

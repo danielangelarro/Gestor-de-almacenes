@@ -100,7 +100,10 @@ public class EntradaAndSalidaController : ApiController
             request.ID_Producto,
             request.ID_Usuario,
             request.Cantidad,
-            request.Fecha
+            request.Precio_Unidad,
+            request.Fecha,
+            request.Fecha_Caducidad,
+            request.Token
         );
 
         ErrorOr<EntradaResult> entradaResult = await _mediator.Send(query);
@@ -112,13 +115,15 @@ public class EntradaAndSalidaController : ApiController
     }
     
     [HttpPost("salida/add")]
-    public async Task<IActionResult> AddSalida(UploadEntradaRequest request)
+    public async Task<IActionResult> AddSalida(UploadSalidaRequest request)
     {
         var query = new AddSalidaCommands(
             request.ID_Producto,
             request.ID_Usuario,
             request.Cantidad,
-            request.Fecha
+            request.Precio_Unidad,
+            request.Fecha,
+            request.Token
         );
 
         ErrorOr<SalidaResult> salidaResult = await _mediator.Send(query);

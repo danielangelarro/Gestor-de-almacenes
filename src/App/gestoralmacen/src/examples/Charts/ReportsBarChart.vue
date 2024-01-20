@@ -67,6 +67,10 @@ export default {
       type: String,
       default: "dark",
     },
+    load: {
+      type: Boolean,
+      default: false
+    },
     title: {
       type: String,
       default: "",
@@ -92,79 +96,96 @@ export default {
       },
     },
   },
-  mounted() {
-    var ctx = document.getElementById(this.id).getContext("2d");
+  watch: {
+    load: function(newVal) {
 
-    let chartStatus = Chart.getChart(this.id);
-    if (chartStatus != undefined) {
-      chartStatus.destroy();
-    }
+      if (newVal) {
+        var ctx = document.getElementById(this.id).getContext("2d");
 
-    new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: this.chart.labels,
-        datasets: [
-          {
-            label: this.chart.datasets.label,
-            tension: 0.4,
-            borderWidth: 0,
-            borderRadius: 4,
-            borderSkipped: false,
-            backgroundColor: "#fff",
-            data: this.chart.datasets.data,
-            maxBarThickness: 6,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: false,
-          },
-        },
-        interaction: {
-          intersect: false,
-          mode: "index",
-        },
-        scales: {
-          y: {
-            grid: {
-              drawBorder: false,
-              display: false,
-              drawOnChartArea: false,
-              drawTicks: false,
-            },
-            ticks: {
-              suggestedMin: 0,
-              suggestedMax: 500,
-              beginAtZero: true,
-              padding: 15,
-              font: {
-                size: 14,
-                family: "Open Sans",
-                style: "normal",
-                lineHeight: 2,
+        let chartStatus = Chart.getChart(this.id);
+        if (chartStatus != undefined) {
+          chartStatus.destroy();
+        }
+
+        console.log(this.chart.datasets);
+
+        new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: this.chart.labels,
+            datasets: [
+              {
+                label: this.chart.datasets.label,
+                tension: 0.4,
+                borderWidth: 0,
+                borderRadius: 4,
+                borderSkipped: false,
+                backgroundColor: "#fff",
+                data: this.chart.datasets.data.split(","),
+                maxBarThickness: 6,
               },
-              color: "#fff",
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false,
+              },
+            },
+            interaction: {
+              intersect: false,
+              mode: "index",
+            },
+            scales: {
+              y: {
+                grid: {
+                  drawBorder: false,
+                  display: false,
+                  drawOnChartArea: false,
+                  drawTicks: false,
+                },
+                ticks: {
+                  suggestedMin: 0,
+                  suggestedMax: 5000,
+                  beginAtZero: true,
+                  padding: 15,
+                  font: {
+                    size: 14,
+                    family: "Open Sans",
+                    style: "normal",
+                    lineHeight: 2,
+                  },
+                  color: "#fff",
+                },
+              },
+              x: {
+                grid: {
+                  drawBorder: false,
+                  display: false,
+                  drawOnChartArea: false,
+                  drawTicks: false,
+                },
+                ticks: {
+                  suggestedMin: 0,
+                  suggestedMax: 500,
+                  beginAtZero: true,
+                  padding: 15,
+                  font: {
+                    size: 14,
+                    family: "Open Sans",
+                    style: "normal",
+                    lineHeight: 2,
+                  },
+                  color: "#fff",
+                },
+              },
             },
           },
-          x: {
-            grid: {
-              drawBorder: false,
-              display: false,
-              drawOnChartArea: false,
-              drawTicks: false,
-            },
-            ticks: {
-              display: false,
-            },
-          },
-        },
-      },
-    });
+        });
+      }
+    }
   },
 };
 </script>
