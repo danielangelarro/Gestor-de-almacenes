@@ -41,8 +41,4 @@ public class PhotoRepository : IPhotoRepository
         return await _context.Photos.ToListAsync();
     }
 
-    public async Task<List<Photo>> GetPhotosByUser(Guid userId)
-    {
-        return await _context.Photos.Where(user => user.Id == userId).ToListAsync();
-    }
 }

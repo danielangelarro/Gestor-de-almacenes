@@ -7,6 +7,7 @@ using ErrorOr;
 using Microsoft.AspNetCore.Http;
 using GestorDeAlmacenes.Application.Services;
 using Microsoft.VisualBasic;
+using GestorDeAlmacenes.Application.Common.Interfaces.Services;
 
 namespace GestorDeAlmacenes.Application.Salidas.Commands.Add;
 
@@ -20,6 +21,8 @@ public class AddSalidaCommandsHandler : IRequestHandler<AddSalidaCommands, Error
     private readonly IUbicacionSalidaRepository _ubicacionSalidaRepository;
     private readonly IRackRepository _rackRepository;
     private readonly ICasilleroRepository _casilleroRepository;
+    private readonly IDateTimeProvider _dateTimeProvider;
+    private readonly INotificacionRepository _notificacionRepository;
 
     public AddSalidaCommandsHandler(
         IProductoRepository productoRepository,
@@ -29,7 +32,9 @@ public class AddSalidaCommandsHandler : IRequestHandler<AddSalidaCommands, Error
         IUbicacionRepository ubicacionRepository,
         IUbicacionSalidaRepository ubicacionSalidaRepository,
         IRackRepository rackRepository,
-        ICasilleroRepository casilleroRepository)
+        ICasilleroRepository casilleroRepository,
+        INotificacionRepository notificacionRepository,
+        IDateTimeProvider dateTimeProvider)
     {
         _productoRepository = productoRepository;
         _clienteRepository = clienteRepository;
@@ -39,6 +44,8 @@ public class AddSalidaCommandsHandler : IRequestHandler<AddSalidaCommands, Error
         _ubicacionSalidaRepository = ubicacionSalidaRepository;
         _rackRepository = rackRepository;
         _casilleroRepository = casilleroRepository;
+        _notificacionRepository = notificacionRepository;
+        _dateTimeProvider = dateTimeProvider;
     }
 
     public async Task<ErrorOr<SalidaResult>> Handle(AddSalidaCommands command, CancellationToken cancellationToken)
@@ -79,6 +86,11 @@ public class AddSalidaCommandsHandler : IRequestHandler<AddSalidaCommands, Error
         };
 
         await _movimientoRepository.AddSalidaAsync(salida);
+        await _notificacionRepository.AddDiffusionNotificacionAsync(
+            Mensaje: $"Han salido {command.Cantidad} {product.Nombre}.",
+            Tipo: "Nueva Venta de producto",
+            Fecha: _dateTimeProvider.UtcNow
+        );
 
         var ubicaciones_actuales_result = await _ubicacionRepository.GetAllUbicacionesByProductoAsync(product.ID_Producto);
         if (ubicaciones_actuales_result == null)

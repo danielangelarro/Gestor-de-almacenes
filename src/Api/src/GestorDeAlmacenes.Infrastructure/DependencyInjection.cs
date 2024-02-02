@@ -61,8 +61,11 @@ public static class DependencyInjection
         services.AddScoped<IUbicacionRepository, UbicacionRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUbicacionSalidaRepository, UbicacionSalidaRepository>();
+        services.AddScoped<INotificacionRepository, NotificacionRepository>();
 
         services.AddScoped<IGetCurrentUserLoginService, GetCurrentUserLoginService>();
+
+        services.AddHostedService<CheckedCaduceDateProductService>();
 
         Task.Run(
             () => InitializeDatabase(services.BuildServiceProvider().GetRequiredService<GestorDeAlmacenesDBContext>())

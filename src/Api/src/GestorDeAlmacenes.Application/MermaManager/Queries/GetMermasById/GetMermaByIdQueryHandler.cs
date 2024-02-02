@@ -9,21 +9,21 @@ namespace GestorDeAlmacenes.Application.Mermas.Query.GetMermaById;
 
 public class GetMermaByIdQueryHandler : IRequestHandler<GetMermaByIdQuery, ErrorOr<MermaResult>>
 {
-    private readonly IMermaRepository _repository;
+    private readonly IMovimientoRepository _repository;
 
-    public GetMermaByIdQueryHandler(IMermaRepository mermaRepository)
+    public GetMermaByIdQueryHandler(IMovimientoRepository mermaRepository)
     {
         _repository = mermaRepository;
     }
 
     public async Task<ErrorOr<MermaResult>> Handle(GetMermaByIdQuery query, CancellationToken cancellationToken)
     {
-        if (await _repository.GetMermaByIdAsync(query.Id) is not Merma merma)
+        if (await _repository.GetMermaByIdAsync(query.Id) is not Movimientos merma)
         {
             return Errors.Merma.NotFound;
         }
 
-        Merma? mermao = await _repository.GetMermaByIdAsync(query.Id);
+        Movimientos mermao = await _repository.GetMermaByIdAsync(query.Id);
 
         return new MermaResult(mermao);
     }

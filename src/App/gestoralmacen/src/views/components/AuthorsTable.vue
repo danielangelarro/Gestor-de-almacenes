@@ -129,7 +129,7 @@ import SoftAlert from "@/components/SoftAlert.vue";
 import SoftButton from "@/components/SoftButton.vue";
 import { API_URL } from '@/config';
 import axios from 'axios';
-import img1 from "../../assets/img/team-2.jpg";
+import img1 from "../../assets/img/illustrations/client-proveedor.jpeg";
 
 export default {
   name: "authors-table",

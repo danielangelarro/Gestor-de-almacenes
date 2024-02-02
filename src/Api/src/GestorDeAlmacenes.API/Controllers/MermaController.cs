@@ -55,6 +55,7 @@ public class MermaController : ApiController
             request.ID_Merma,
             request.ID_Producto,
             request.Cantidad,
+            request.Descripcion,
             request.Fecha_Caducidad
         );
 

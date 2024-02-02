@@ -8,6 +8,7 @@ public record AddMermaCommands(
    Guid ID_Merma,
    Guid ID_Producto,
    int Cantidad,
+   string Descripcion,
    DateTime Fecha_Caducidad
 ) : IRequest<ErrorOr<MermaResult>>;
 

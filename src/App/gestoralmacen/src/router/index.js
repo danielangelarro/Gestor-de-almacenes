@@ -6,6 +6,7 @@ import Rack from "@/views/Rack.vue";
 import RackWait from "@/views/RackWait.vue";
 import Entrada from "@/views/Entrada.vue";
 import Salida from "@/views/Salida.vue";
+import Merma from "@/views/Merma.vue";
 import Tables from "@/views/Tables.vue";
 import Cliente from "@/views/Client.vue";
 import Proveedor from "@/views/Proveedor.vue";
@@ -66,6 +67,12 @@ const routes = [
     path: "/exit",
     name: "Salida",
     component: Salida,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: "/merma",
+    name: "Merma",
+    component: Merma,
     meta: { requiresAuth: true }
   },
   {

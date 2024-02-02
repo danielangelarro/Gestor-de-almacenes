@@ -9,6 +9,5 @@ namespace GestorDeAlmacenes.Application.Gallery.Commands.Upload;
 public record UploadPhotoCommands(
     IFormFile file,
     string FileName,
-    string FileDescription,
-    User Auth
+    string FileDescription
 ) : IRequest<ErrorOr<GalleryResult>>;

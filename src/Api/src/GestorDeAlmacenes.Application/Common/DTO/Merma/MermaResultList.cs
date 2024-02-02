@@ -3,5 +3,5 @@ using System.Collections.Generic;
 
 namespace GestorDeAlmacenes.Application.DTO.Mermas
 {
-    public record MermaResultList(ICollection<Merma> mermas);
+    public record MermaResultList(ICollection<Movimientos> mermas);
 }

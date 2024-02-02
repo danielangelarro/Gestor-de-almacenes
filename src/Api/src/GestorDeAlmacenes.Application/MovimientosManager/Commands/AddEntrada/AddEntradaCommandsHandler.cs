@@ -20,6 +20,8 @@ public class AddEntradaCommandsHandler : IRequestHandler<AddEntradaCommands, Err
     private readonly ICasilleroRepository _casilleroRepository;
     private readonly IDateTimeProvider dateTimeProvider;
     private readonly IGetCurrentUserLoginService _getCurrentUserLoginService;
+    private readonly IDateTimeProvider _dateTimeProvider;
+    private readonly INotificacionRepository _notificacionRepository;
 
     public AddEntradaCommandsHandler(
         IProductoRepository productoRepository,
@@ -28,7 +30,9 @@ public class AddEntradaCommandsHandler : IRequestHandler<AddEntradaCommands, Err
         IRackRepository rackRepository,
         IUbicacionRepository ubicacionRepository,
         ICasilleroRepository casilleroRepository,
-        IGetCurrentUserLoginService getCurrentUserLoginService)
+        IGetCurrentUserLoginService getCurrentUserLoginService,
+        IDateTimeProvider dateTimeProvider,
+        INotificacionRepository notificacionRepository)
     {
         _productoRepository = productoRepository;
         _movimientoRepository = movimientoRepository;
@@ -37,6 +41,8 @@ public class AddEntradaCommandsHandler : IRequestHandler<AddEntradaCommands, Err
         _ubicacionRepository = ubicacionRepository;
         _casilleroRepository = casilleroRepository;
         _getCurrentUserLoginService = getCurrentUserLoginService;
+        _dateTimeProvider = dateTimeProvider;
+        _notificacionRepository = notificacionRepository;
     }
 
     public async Task<ErrorOr<EntradaResult>> Handle(AddEntradaCommands command, CancellationToken cancellationToken)
@@ -82,6 +88,11 @@ public class AddEntradaCommandsHandler : IRequestHandler<AddEntradaCommands, Err
         };
 
         await _movimientoRepository.AddEntradaAsync(entrada);
+        await _notificacionRepository.AddDiffusionNotificacionAsync(
+            Mensaje: $"Ha entrado {command.Cantidad} de {product.Nombre}.",
+            Tipo: "Nueva Compra de producto",
+            Fecha: _dateTimeProvider.UtcNow
+        );
 
         // Agregar al rack de espera
 

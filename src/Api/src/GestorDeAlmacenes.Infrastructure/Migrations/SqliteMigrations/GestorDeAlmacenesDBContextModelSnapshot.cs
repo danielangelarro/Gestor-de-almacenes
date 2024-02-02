@@ -169,6 +169,10 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                     b.Property<string>("Cliente_Name")
                         .HasColumnType("text");
 
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("timestamp with time zone");
 
@@ -214,13 +218,37 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                     b.ToTable("Movimientos");
                 });
 
+            modelBuilder.Entity("GestorDeAlmacenes.Application.Entities.Notificacion", b =>
+                {
+                    b.Property<Guid>("ID_Notificacion")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("ID_Usuario")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Tipo")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("ID_Notificacion");
+
+                    b.HasIndex("ID_Usuario");
+
+                    b.ToTable("Notificaciones");
+                });
+
             modelBuilder.Entity("GestorDeAlmacenes.Application.Entities.Photo", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("AuthID_User")
                         .HasColumnType("uuid");
 
                     b.Property<byte[]>("Contenido")
@@ -236,8 +264,6 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AuthID_User");
 
                     b.ToTable("Photos");
                 });
@@ -485,6 +511,9 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                     b.Property<string>("Password")
                         .HasColumnType("text");
 
+                    b.Property<string>("Photo")
+                        .HasColumnType("text");
+
                     b.Property<string>("Rol")
                         .HasColumnType("text");
 
@@ -569,15 +598,15 @@ namespace GestorDeAlmacenes.Infrastructure.Migrations.SqliteMigrations
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("GestorDeAlmacenes.Application.Entities.Photo", b =>
+            modelBuilder.Entity("GestorDeAlmacenes.Application.Entities.Notificacion", b =>
                 {
-                    b.HasOne("GestorDeAlmacenes.Application.Entities.User", "Auth")
+                    b.HasOne("GestorDeAlmacenes.Application.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("AuthID_User")
+                        .HasForeignKey("ID_Usuario")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Auth");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("GestorDeAlmacenes.Application.Entities.Salida", b =>

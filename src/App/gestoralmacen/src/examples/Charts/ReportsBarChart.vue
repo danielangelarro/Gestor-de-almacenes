@@ -107,8 +107,6 @@ export default {
           chartStatus.destroy();
         }
 
-        console.log(this.chart.datasets);
-
         new Chart(ctx, {
           type: "bar",
           data: {

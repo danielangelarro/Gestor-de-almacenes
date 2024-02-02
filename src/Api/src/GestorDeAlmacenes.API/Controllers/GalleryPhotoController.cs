@@ -5,7 +5,6 @@ using GestorDeAlmacenes.Application.Common.Interfaces;
 using GestorDeAlmacenes.Application.Common.Interfaces.Repository;
 using GestorDeAlmacenes.Application.Gallery.Query.GetPhotos;
 using GestorDeAlmacenes.Application.Gallery.Query.Download;
-using GestorDeAlmacenes.Application.Gallery.Query.GetPhotoUser;
 using GestorDeAlmacenes.Application.Gallery.Commands.Upload;
 using GestorDeAlmacenes.Application.Gallery.Commands.Update;
 using GestorDeAlmacenes.Application.Gallery.Commands.Delete;
@@ -23,10 +22,27 @@ namespace GestorDeAlmacenes.API.Controllers;
 public class GestorDeAlmacenesController : ApiController
 {
     private readonly ISender _mediator;
+    private readonly IWebHostEnvironment _hostingEnvironment;
 
-    public GestorDeAlmacenesController(ISender mediator)
+    public GestorDeAlmacenesController(ISender mediator, IWebHostEnvironment hostingEnvironment)
     {
         _mediator = mediator;
+        _hostingEnvironment = hostingEnvironment;
+    }
+
+    [HttpPost("serve-image")]
+    public IActionResult ServeImage(GalleryServeRequest gallery)
+    {
+        string dir = _hostingEnvironment.ContentRootPath;
+        string filePath = Path.Combine(dir, gallery.Path);
+
+         if (!System.IO.File.Exists(filePath))
+        {
+            return NotFound();
+        }
+
+        var image = System.IO.File.ReadAllBytes(filePath);
+        return File(image, "image/jpg");
     }
 
     [HttpGet]
@@ -42,7 +58,7 @@ public class GestorDeAlmacenesController : ApiController
         );
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("get/{id}")]
     public async Task<IActionResult> GetPhotoById(Guid id)
     {
         var query = new DownloadPhotoQuery(id);
@@ -68,27 +84,13 @@ public class GestorDeAlmacenesController : ApiController
         );
     }
     
-    [HttpGet("user/{userId}")]
-    public async Task<IActionResult> GetPhotosByUser(Guid userId)
-    {
-        var query = new GetByUserPhotoQuery(userId);
-
-        ErrorOr<GalleryResultList> galleryResultList = await _mediator.Send(query);
-        
-        return galleryResultList.Match(
-            result => Ok(galleryResultList),
-            errors => Problem(errors)
-        );
-    }
-    
     [HttpPost]
     public async Task<IActionResult> UploadPhoto(GalleryUploadRequest request)
     {
         var query = new UploadPhotoCommands(
             request.File,
             request.FileName,
-            request.FileDescription,
-            request.User
+            request.FileDescription
         );
 
         ErrorOr<GalleryResult> galleryResult = await _mediator.Send(query);
@@ -116,7 +118,7 @@ public class GestorDeAlmacenesController : ApiController
         );
     }
     
-    [HttpDelete("{fileId}")]
+    [HttpDelete("delete/{fileId}")]
     public async Task<IActionResult> DeletePhoto(Guid fileId)
     {
         var query = new DeletePhotoCommands(fileId);

@@ -63,7 +63,7 @@
                 <div class="d-flex px-2">
                   <div>
                     <img
-                      src="../../assets/img/small-logos/logo-invision.svg"
+                      src="../../assets/img/illustrations/product.jpeg"
                       class="avatar avatar-sm rounded-circle me-2"
                       alt="spotify"
                     />

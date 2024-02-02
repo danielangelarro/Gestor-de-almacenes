@@ -9,6 +9,8 @@ using GestorDeAlmacenes.Application.Racks.Query.GetRackById;
 using GestorDeAlmacenes.Application.Racks.Commands.Delete;
 using GestorDeAlmacenes.Application.Racks.Commands.Update;
 using GestorDeAlmacenes.Application.Racks.Commands.Add;
+using GestorDeAlmacenes.Application.Entradas.Query.GetAllRacksReport;
+using Aspose.Pdf;
 
 
 namespace GestorDeAlmacenes.API.Controllers;
@@ -35,6 +37,19 @@ public class RackController : ApiController
             result => Ok(rackResultList),
             errors => Problem(errors)
         );
+    }
+
+    [HttpGet("report")]
+    public async Task<IActionResult> GetSalidaReport()
+    {
+        var query = new GetAllRacksReportQuery();
+        ErrorOr<Document> document = await _mediator.Send(query);
+
+        using (MemoryStream stream = new MemoryStream())
+        {
+            document.Value.Save(stream);
+            return File(stream.ToArray(), "application/pdf", "ReporteProductosUbicaciones.pdf");
+        }
     }
 
     [HttpGet("{id}")]

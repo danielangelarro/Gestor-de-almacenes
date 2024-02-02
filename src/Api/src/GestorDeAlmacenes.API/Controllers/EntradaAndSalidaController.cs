@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 using MediatR;
+using Aspose.Pdf;
 using ErrorOr;
 using GestorDeAlmacenes.Application.DTO.EntradaAndSalidas;
 using GestorDeAlmacenes.Application.EntradaAndSalidas.Query.GetEntradaAndSalidaById;
@@ -13,6 +14,8 @@ using GestorDeAlmacenes.Application.Salidas.Query.GetAllSalidas;
 using GestorDeAlmacenes.Application.DTO.Salidas;
 using GestorDeAlmacenes.Application.Entradas.Query.GetEntradaById;
 using GestorDeAlmacenes.Application.Salidas.Query.GetSalidaById;
+using GestorDeAlmacenes.Application.Entradas.Query.GetAllEntradaReport;
+using GestorDeAlmacenes.Application.Entradas.Query.GetAllSalidaReport;
 
 
 namespace GestorDeAlmacenes.API.Controllers;
@@ -39,6 +42,32 @@ public class EntradaAndSalidaController : ApiController
             result => Ok(entradasResultList),
             errors => Problem(errors)
         );
+    }
+
+    [HttpGet("entrada/report")]
+    public async Task<IActionResult> GetEntradaReport()
+    {
+        var query = new GetAllEntradasReportQuery();
+        ErrorOr<Document> document = await _mediator.Send(query);
+
+        using (MemoryStream stream = new MemoryStream())
+        {
+            document.Value.Save(stream);
+            return File(stream.ToArray(), "application/pdf", "ReporteEntradaProductos.pdf");
+        }
+    }
+    
+    [HttpGet("salida/report")]
+    public async Task<IActionResult> GetSalidaReport()
+    {
+        var query = new GetAllSalidasReportQuery();
+        ErrorOr<Document> document = await _mediator.Send(query);
+
+        using (MemoryStream stream = new MemoryStream())
+        {
+            document.Value.Save(stream);
+            return File(stream.ToArray(), "application/pdf", "ReporteSalidaProductos.pdf");
+        }
     }
     
     [HttpGet("salida")]

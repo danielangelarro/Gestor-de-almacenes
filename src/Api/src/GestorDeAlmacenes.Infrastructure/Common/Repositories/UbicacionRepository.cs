@@ -1,6 +1,7 @@
 using System.Transactions;
 using GestorDeAlmacenes.Application.Common.Interfaces;
 using GestorDeAlmacenes.Application.Entities;
+using GestorDeAlmacenes.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace GestorDeAlmacenes.Infrastructure.Repositories;
@@ -8,10 +9,12 @@ namespace GestorDeAlmacenes.Infrastructure.Repositories;
 public class UbicacionRepository : IUbicacionRepository
 {
   private readonly GestorDeAlmacenesDBContext _context;
+  private DateTimeProvider _dateTimeProvider;
 
     public UbicacionRepository(GestorDeAlmacenesDBContext context)
     {
         _context = context;
+        _dateTimeProvider = new DateTimeProvider();
     }
 
     public async Task AddUbicacionAsync(Ubicacion ubicacion)
@@ -64,4 +67,38 @@ public class UbicacionRepository : IUbicacionRepository
         _context.Ubicaciones.Update(ubicacion);
         await _context.SaveChangesAsync();
     }
+
+    #region Servicios
+
+    public async Task<ICollection<Ubicacion>> CheckedCaduceDateProductService()
+    {
+        var ubicaciones = await _context.Ubicaciones.ToListAsync();
+        var today = _dateTimeProvider.UtcNow.Date;
+        List<Ubicacion> mermas = new List<Ubicacion>();
+
+        if (await _context.Racks.Where(rack => rack.Type == "wait").FirstOrDefaultAsync() is not Rack rack_wait)
+        {
+            return mermas;
+        }
+
+        if (await _context.Casilleros.Where(c => c.ID_Rack == rack_wait.ID_Rack).FirstOrDefaultAsync() is not Casillero casillero_wait)
+        {
+            return mermas;
+        }
+
+        foreach (var ubicacion in ubicaciones)
+        {
+            if (ubicacion.ID_Casillero != casillero_wait.ID_Casillero)
+            {
+                if (ubicacion.Fecha_Caducidad.Date <= today)
+                {
+                    mermas.Add(ubicacion);
+                }
+            }
+        }
+
+        return mermas;
+    }
+
+    #endregion
 }

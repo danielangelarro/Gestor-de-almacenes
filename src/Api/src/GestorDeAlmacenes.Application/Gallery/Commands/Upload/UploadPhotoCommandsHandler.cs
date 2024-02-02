@@ -29,7 +29,6 @@ public class UploadPhotoCommandsHandler : IRequestHandler<UploadPhotoCommands, E
 
             photo.Id = Guid.NewGuid();
             photo.FileName = command.file.FileName;
-            photo.Auth = command.Auth;
         }
 
         _photoRepository.Add(photo);

@@ -41,6 +41,11 @@ public static partial class DependencyInjection
                     ValidAudience = audience
                 };
             });
+        
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+        });
 
         return services;
     }

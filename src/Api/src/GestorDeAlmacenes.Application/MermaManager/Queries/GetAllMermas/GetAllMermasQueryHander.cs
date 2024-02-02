@@ -7,9 +7,9 @@ namespace GestorDeAlmacenes.Application.Mermas.Query.GetAllMermas;
 
 public class GetAllMermasQueryHandler : IRequestHandler<GetAllMermasQuery, ErrorOr<MermaResultList>>
 {
-    private readonly IMermaRepository _repository;
+    private readonly IMovimientoRepository _repository;
 
-    public GetAllMermasQueryHandler(IMermaRepository mermaoRepository)
+    public GetAllMermasQueryHandler(IMovimientoRepository mermaoRepository)
     {
         _repository = mermaoRepository;
     }

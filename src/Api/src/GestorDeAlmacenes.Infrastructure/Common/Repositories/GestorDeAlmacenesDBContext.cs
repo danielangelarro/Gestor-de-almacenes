@@ -46,5 +46,6 @@ public class GestorDeAlmacenesDBContext : DbContext
     public DbSet<Merma> Mermas { get; set; }
     public DbSet<Entrada> Entradas { get; set; }
     public DbSet<Salida> Salidas { get; set; }
+    public DbSet<Notificacion> Notificaciones { get; set; }
     public DbSet<Ubicacion_Salida> Ubicacion_Salidas { get; set; }
 }

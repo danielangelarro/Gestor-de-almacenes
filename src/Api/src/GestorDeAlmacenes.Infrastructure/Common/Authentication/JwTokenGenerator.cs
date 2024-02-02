@@ -27,12 +27,18 @@ public class JwTokenGenerator : IJwtTokenGenerator
             SecurityAlgorithms.HmacSha256
         );
 
+        if (user.Rol is null)
+        {
+            user.Rol = "almacenero";
+        }
+
         var claims = new []
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.ID_User.ToString()),
             new Claim(JwtRegisteredClaimNames.GivenName, user.Nombres),
             new Claim(JwtRegisteredClaimNames.FamilyName, user.Apellidos),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(ClaimTypes.Role, user.Rol),
         };
 
         var securityToken = new JwtSecurityToken(

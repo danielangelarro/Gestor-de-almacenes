@@ -119,6 +119,7 @@ export default {
                 iD_Producto: this.iD_Producto,
                 iD_Usuario: this.iD_Usuario,
                 cantidad: this.cantidad,
+                precio_Unidad: this.precio_Salida,
                 fecha: this.fecha,
                 token: this.token,
             })

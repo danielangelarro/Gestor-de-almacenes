@@ -18,6 +18,7 @@ public class Movimientos
     public string? Cliente_Name { get; set; }
     public string? Autorization { get; set; }
     public string? Producto_Name { get; set; }
+    public string Descripcion { get; set; } = "";
     public int Cantidad { get; set; }
     public float Precio_Unidad { get; set; }
     public DateTime Fecha { get; set; }

@@ -6,6 +6,7 @@ namespace GestorDeAlmacenes.Application.DTO.Mermas
         Guid ID_Merma,
         Guid ID_Producto,
         int Cantidad,
+        string Descripcion,
         DateTime Fecha_Caducidad
     );
 }
