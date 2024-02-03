@@ -8,6 +8,8 @@
 
        steps:
        - uses: actions/checkout@v2
+       with:
+         path: Gestor-de-almacenes
 
        - name: Build and test
          run: |

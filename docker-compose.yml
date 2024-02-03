@@ -5,10 +5,10 @@
        environment:
          POSTGRES_PASSWORD: admin
      backend:
-       build: ./src/api
+       build: ./src/Api
        depends_on:
          - db
      frontend:
-       build: ./src/app
+       build: ./src/App/gestoralmacen
        depends_on:
          - backend
