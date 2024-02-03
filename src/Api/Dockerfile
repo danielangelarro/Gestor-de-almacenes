@@ -13,7 +13,7 @@ RUN dotnet restore
 
 # Copia el código fuente de todos los proyectos y compila la aplicación
 COPY src/GestorDeAlmacenes.Application/ ./src/GestorDeAlmacenes.Application/
-COPY src/GestorDeAlmacenes.Infraestructure/ ./src/GestorDeAlmacenes.Infraestructure/
+COPY src/GestorDeAlmacenes.Infrastructure/ ./src/GestorDeAlmacenes.Infrastructure/
 COPY src/GestorDeAlmacenes.Domain/ ./src/GestorDeAlmacenes.Domain/
 COPY src/GestorDeAlmacenes.API/ ./src/GestorDeAlmacenes.API/
 RUN dotnet build src/GestorDeAlmacenes.API/GestorDeAlmacenes.API.csproj -c Release
