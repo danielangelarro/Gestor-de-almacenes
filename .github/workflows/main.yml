@@ -24,5 +24,7 @@ jobs:
     - uses: actions/setup-node@v2
       with:
         node-version: '14'
+    - name: Change to Node.js app directory
+      run: cd src/App/gestoralmacen
     - run: npm install
     - run: npm run build
