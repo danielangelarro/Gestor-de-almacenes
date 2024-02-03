@@ -6,11 +6,11 @@ services:
       POSTGRES_PASSWORD: admin
  backend:
     build: ./src/Api
-    image: dukagin/backend:${{ github.sha }}
+    image: dukagin/backend:dev
     depends_on:
       - db
  frontend:
     build: ./src/App/gestoralmacen
-    image: dukagin/frontend:${{ github.sha }}
+    image: dukagin/frontend:dev
     depends_on:
       - backend
