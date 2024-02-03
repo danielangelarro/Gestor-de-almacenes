@@ -1,9 +1,8 @@
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
 WORKDIR /app
 
-# Copia todos los archivos .csproj y restaura las dependencias
-COPY src/GestorDeAlmacenes.*.sln ./
-COPY src/GestorDeAlmacenes.*/*.csproj ./
+# Copia el archivo de solución principal y restaura las dependencias
+COPY GestorDeAlmacenes.sln ./
 RUN dotnet restore
 
 # Copia el código fuente de todos los proyectos y compila la aplicación
