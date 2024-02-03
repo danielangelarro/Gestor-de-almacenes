@@ -3,17 +3,30 @@ name: CI
 on: [push]
 
 jobs:
- build:
+ dotnet-build:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
       with:
-        path: Gestor-de-almacenes
+        dotnet-version: '3.1' # Asegúrate de especificar la versión correcta de .NET Core
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
 
-    - name: Build and test
-      run: |
-        cd Gestor-de-almacenes
-        docker-compose build
-        docker-compose up -d
-        docker-compose down
+ node-build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+    - run: npm ci
+    - run: npm run build
+    - run: npm test

@@ -1,5 +1,5 @@
 # Establecer la imagen base
-FROM node:20.5 as build-stage
+FROM node:14 as build-stage
 WORKDIR /app
 
 # Instalar dependencias
