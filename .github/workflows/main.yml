@@ -36,6 +36,12 @@ jobs:
       - name: Start Postgres
         run: docker run --name postgres_local -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=testdb -d postgres
 
+      # - name: Run database migrations
+      #   run: |
+      #     dotnet ef migrations add ProductionUpdate --context GestorDeAlmacenesDBContext --output-dir Migrations/SqliteMigrations
+      #     dotnet ef database update
+      #   working-directory: ./src/Api/src/GestorDeAlmacenes.Infrastructure
+
       - name: Install Node.js
         uses: actions/setup-node@v2
         with:
@@ -46,19 +52,15 @@ jobs:
           cd src/App/gestoralmacen
           npm install
           npm run build
-
-      # - name: Run database migrations
-      #   run: |
-      #     dotnet ef migrations add ProductionUpdate --context GestorDeAlmacenesDBContext --output-dir Migrations/SqliteMigrations
-      #     dotnet ef database update
-      #   working-directory: ./src/Api/src/GestorDeAlmacenes.Infrastructure
           
-      - name: Run Vue.js app
-        run: npm run serve -- --port 8080 &
-        working-directory: ./src/App/gestoralmacen
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.ACTION_GITHUB_TOKEN }}
+          publish_dir: ./dist
   
       - name: Start .NET API
-        run: dotnet run --project ./GestorDeAlmacenes.API/ --urls "http://0.0.0.0:5000" &
+        run: dotnet run --project ./GestorDeAlmacenes.API/ --urls "http://localhost:5000" &
         working-directory: ./src/Api/src
 
       - name: Install Ngrok
@@ -71,7 +73,7 @@ jobs:
         uses: luisboto/ngrok-tunnel-action@v0.1.7.2
         with:
             timeout: 48h
-            port: 5000
+            port: 8080
             ngrok_authtoken: ${{ secrets.NGROK_AUTH_TOKEN }}
             tunnel_type: http
       
@@ -84,18 +86,18 @@ jobs:
       - name: Print ngrok URL
         run: echo "${{ env.NGROK_URL }}"
       
-      # - name: Loop 
-      #   run: |
-      #       start=$(date +%s)
-      #       while : ; do
-      #         echo "Running..."
-      #         sleep 1
-      #         current=$(date +%s)
-      #         elapsed=$((current - start))
-      #         if ((elapsed > 172800)); then
-      #           break
-      #         fi
-      #       done
+      - name: Loop 
+        run: |
+            start=$(date +%s)
+            while : ; do
+              echo "Running..."
+              sleep 1
+              current=$(date +%s)
+              elapsed=$((current - start))
+              if ((elapsed > 172800)); then
+                break
+              fi
+            done
 
 # name: Deploy with Ngrok
 
