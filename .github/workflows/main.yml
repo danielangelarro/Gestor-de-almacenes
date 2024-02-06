@@ -48,7 +48,7 @@ jobs:
 
       - name: Run database migrations
         run: |
-          cd src/Api/GestorDeAlmacenes/src/GestorDeAlmacenes.Infrastructure
+          cd src/Api/src/GestorDeAlmacenes.Infrastructure
           dotnet ef migrations add ProductionUpdate --context GestorDeAlmacenesDBContext --output-dir Migrations/SqliteMigrations
           dotnet ef database update
           
@@ -57,7 +57,7 @@ jobs:
         working-directory: ./src/App/gestoralmacen
   
       - name: Start .NET API
-        run: dotnet run --project src/Api/GestorDeAlmacenes.API/GestorDeAlmacenes.API.csproj --urls "http://0.0.0.0:5000"
+        run: dotnet run --project src/Api/src/GestorDeAlmacenes.API/GestorDeAlmacenes.API.csproj --urls "http://0.0.0.0:5000"
 
       - name: Install Ngrok
         run: |
