@@ -70,8 +70,8 @@ jobs:
       - name: Start ngrok
         uses: luisboto/ngrok-tunnel-action@v0.1.7.2
         with:
-            timeout: 1h
-            port: 8080
+            timeout: 48h
+            port: 5000
             ngrok_authtoken: ${{ secrets.NGROK_AUTH_TOKEN }}
             tunnel_type: http
       
