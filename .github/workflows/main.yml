@@ -53,17 +53,19 @@ jobs:
           npm install
           npm run build
           
-      - name: Deploy to GitHub Pages
+      - name: Configure Git
         run: |
-          git config --global user.email "68783745+danielangelarro@users.noreply.github.com"
-          git config --global user.name "Daniel Ángel"
-          git checkout -B gh-pages
-          git add -f src/App/gestoralmacen/dist
-          git commit -m "Deploying to gh-pages"
-          git push -f origin gh-pages
+          git config --global user.email "danielarromoreno@gmail.com"
+          git config --global user.name "GitHubWorkFlow"
         env:
           GIT_SSH_COMMAND: 'ssh -o StrictHostKeyChecking=no'
-          GITHUB_TOKEN: ${{ secrets.ACTION_GITHUB_TOKEN }}
+      
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.ACTION_GITHUB_TOKEN }}
+          publish_dir: ./src/App/gestoralmacen/dist
+
   
       - name: Start .NET API
         run: dotnet run --project ./GestorDeAlmacenes.API/ --urls "http://localhost:5000" &
