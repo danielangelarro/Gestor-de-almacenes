@@ -1,98 +1,159 @@
-name: Deploy with Ngrok
+name: .NET Core and Vue.js Workflow
 
 on:
- push:
+  push:
     branches:
       - main
 
 jobs:
- deploy:
+  build:
     runs-on: ubuntu-latest
-
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: admin
+          POSTGRES_DB: testdb
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
 
-    - name: Login to DockerHub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Restore and build .NET Core Solution
+        run: | 
+          dotnet restore src/Api/GestorDeAlmacenes.sln
+          dotnet build src/Api/GestorDeAlmacenes.sln
 
-    - name: Build and push backend image
-      uses: docker/build-push-action@v2
-      with:
-        context: ./src/Api
-        push: true
-        tags: dukagin/backend:${{ github.sha }}
+      - name: Start Postgres
+        run: docker run --name postgres_local -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=testdb -d postgres
 
-    - name: Build and push frontend image
-      uses: docker/build-push-action@v2
-      with:
-        context: ./src/App/gestoralmacen
-        push: true
-        tags: dukagin/frontend:${{ github.sha }}
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
 
-    - name: Run Docker Compose
-      run: |
-        docker-compose up -d
+      - name: Install dependencies and build Vue.js app
+        run: |
+          cd src/App/gestoralmacen
+          npm install
+          npm run build
+
+      - name: Run database migrations
+        run: |
+          cd src/Api/GestorDeAlmacenes/src/GestorDeAlmacenes.Infrastructure
+          dotnet ef migrations add ProductionUpdate --context GestorDeAlmacenesDBContext --output-dir Migrations/SqliteMigrations
+          dotnet ef database update
+          
+      - name: Run Vue.js app
+        run: npm run serve -- --port 8080
+        working-directory: ./src/App/gestoralmacen
+  
+      - name: Start .NET API
+        run: dotnet run --project src/Api/GestorDeAlmacenes.API/GestorDeAlmacenes.API.csproj --urls "http://0.0.0.0:5000"
+
+      - name: Install Ngrok
+        run: |
+          wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+          unzip ngrok-stable-linux-amd64.zip
+          sudo mv ngrok /usr/local/bin
+  
+      - name: Start ngrok
+        uses: luisboto/ngrok-tunnel-action@v0.1.7.2
+        with:
+            timeout: 1h
+            port: 8080
+            ngrok_authtoken: ${{ secrets.NGROK_AUTH_TOKEN }}
+            tunnel_type: http
+      
+      - name: Install jq
+        run: sudo apt-get install jq
+      - name: Get ngrok URL
+        run: |
+          echo "NGROK_URL=$(curl -s http://localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url')" >> $GITHUB_ENV
+  
+      - name: Print ngrok URL
+        run: echo "${{ env.NGROK_URL }}"
+      
+      - name: Loop 
+        run: |
+            start=$(date +%s)
+            while : ; do
+              echo "Running..."
+              sleep 1
+              current=$(date +%s)
+              elapsed=$((current - start))
+              if ((elapsed > 600)); then
+                break
+              fi
+            done
+
+# name: Deploy with Ngrok
+
+# on:
+#  push:
+#     branches:
+#       - main
+
+# jobs:
+#  deploy:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v2
+
+#     - name: Set up Docker Buildx
+#       uses: docker/setup-buildx-action@v1
+
+#     - name: Login to DockerHub
+#       uses: docker/login-action@v1
+#       with:
+#         username: ${{ secrets.DOCKERHUB_USERNAME }}
+#         password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+#     - name: Build and push backend image
+#       uses: docker/build-push-action@v2
+#       with:
+#         context: ./src/Api
+#         push: true
+#         tags: dukagin/backend:${{ github.sha }}
+
+#     - name: Build and push frontend image
+#       uses: docker/build-push-action@v2
+#       with:
+#         context: ./src/App/gestoralmacen
+#         push: true
+#         tags: dukagin/frontend:${{ github.sha }}
+
+#     - name: Run Docker Compose
+#       run: |
+#         docker-compose up -d
     
-    - name: Build
-      run: dotnet build --no-restore
-      working-directory: ./src/Api/
+#     - name: Build
+#       run: dotnet build --no-restore
+#       working-directory: ./src/Api/
 
-    - name: Run database migrations
-      run: |
-        docker run -v /app/src/Api/src/GestorDeAlmacenes.Infrastructure:/app --workdir=/app/src/Api/src/GestorDeAlmacenes.Infrastructure mcr.microsoft.com/dotnet/sdk:7.0 dotnet ef migrations add Production${{ github.sha }} --context GestorDeAlmacenesDBContext --output-dir Migrations/SqliteMigrations
-        docker run -v /app/src/Api/src/GestorDeAlmacenes.Infrastructure:/app --workdir=/app/src/Api/src/GestorDeAlmacenes.Infrastructure mcr.microsoft.com/dotnet/sdk:7.0 dotnet ef database update --context GestorDeAlmacenesDBContext
-      working-directory: ./src/Api/src/GestorDeAlmacenes.Infrastructure
+#     - name: Run database migrations
+#       run: |
+#         docker run -v /app/src/Api/src/GestorDeAlmacenes.Infrastructure:/app --workdir=/app/src/Api/src/GestorDeAlmacenes.Infrastructure mcr.microsoft.com/dotnet/sdk:7.0 dotnet ef migrations add Production${{ github.sha }} --context GestorDeAlmacenesDBContext --output-dir Migrations/SqliteMigrations
+#         docker run -v /app/src/Api/src/GestorDeAlmacenes.Infrastructure:/app --workdir=/app/src/Api/src/GestorDeAlmacenes.Infrastructure mcr.microsoft.com/dotnet/sdk:7.0 dotnet ef database update --context GestorDeAlmacenesDBContext
+#       working-directory: ./src/Api/src/GestorDeAlmacenes.Infrastructure
 
-    - name: Run API
-      run: |
-        dotnet run &
-      working-directory: ./src/Api
+#     - name: Run API
+#       run: |
+#         dotnet run &
+#       working-directory: ./src/Api
     
 
-    - name: Run frontend
-      run: |
-        npm run serve &
-      working-directory: ./src/App/gestoralmacen
-
-    - name: Install Ngrok
-      run: |
-        wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
-        unzip ngrok-stable-linux-amd64.zip
-        sudo mv ngrok /usr/local/bin
-
-    - name: Start ngrok
-      uses: luisboto/ngrok-tunnel-action@v0.1.7.2
-      with:
-          timeout: 1h
-          port: 8080
-          ngrok_authtoken: ${{ secrets.NGROK_AUTH_TOKEN }}
-          tunnel_type: http
-    
-    - name: Install jq
-      run: sudo apt-get install jq
-    - name: Get ngrok URL
-      run: |
-        echo "NGROK_URL=$(curl -s http://localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url')" >> $GITHUB_ENV
-
-    - name: Print ngrok URL
-      run: echo "${{ env.NGROK_URL }}"
-    
-    - name: Loop 
-      run: |
-          start=$(date +%s)
-          while : ; do
-            echo "Running..."
-            sleep 1
-            current=$(date +%s)
-            elapsed=$((current - start))
-            if ((elapsed > 600)); then
-              break
-            fi
-          done
+#     - name: Run frontend
+#       run: |
+#         npm run serve &
+#       working-directory: ./src/App/gestoralmacen
