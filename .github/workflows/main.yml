@@ -40,6 +40,9 @@ jobs:
       run: |
         docker-compose up -d
     
+    - name: Build
+      run: dotnet build --no-restore
+
     - name: Run database migrations
       run: |
         docker run -v /app/src/Api/src/GestorDeAlmacenes.Infrastructure:/app --workdir=/app/src/Api/src/GestorDeAlmacenes.Infrastructure mcr.microsoft.com/dotnet/sdk:7.0 dotnet ef migrations add Production${{ github.sha }} --context GestorDeAlmacenesDBContext --output-dir Migrations/SqliteMigrations
