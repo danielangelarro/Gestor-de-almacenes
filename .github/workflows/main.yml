@@ -39,6 +39,23 @@ jobs:
     - name: Run Docker Compose
       run: |
         docker-compose up -d
+    
+    - name: Run database migrations
+      run: |
+        dotnet ef migrations add Production${{ github.sha }} --context GestorDeAlmacenesDBContext --output-dir Migrations/SqliteMigrations
+        dotnet ef database update
+      working-directory: ./ruta/de/tu/api
+
+    - name: Run API
+      run: |
+        dotnet run &
+      working-directory: ./src/Api
+    
+
+    - name: Run frontend
+      run: |
+        npm run serve &
+      working-directory: ./src/App/gestoralmacen
 
     - name: Install Ngrok
       run: |
