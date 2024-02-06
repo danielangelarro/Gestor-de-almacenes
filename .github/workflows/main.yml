@@ -46,11 +46,11 @@ jobs:
           npm install
           npm run build
 
-      - name: Run database migrations
-        run: |
-          dotnet ef migrations add ProductionUpdate --context GestorDeAlmacenesDBContext --output-dir Migrations/SqliteMigrations
-          dotnet ef database update
-        working-directory: ./src/Api/src/GestorDeAlmacenes.Infrastructure
+      # - name: Run database migrations
+      #   run: |
+      #     dotnet ef migrations add ProductionUpdate --context GestorDeAlmacenesDBContext --output-dir Migrations/SqliteMigrations
+      #     dotnet ef database update
+      #   working-directory: ./src/Api/src/GestorDeAlmacenes.Infrastructure
           
       - name: Run Vue.js app
         run: npm run serve -- --port 8080
