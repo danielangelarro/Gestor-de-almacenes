@@ -46,8 +46,19 @@ jobs:
         unzip ngrok-stable-linux-amd64.zip
         sudo mv ngrok /usr/local/bin
 
-    - name: Expose application with Ngrok
+    - name: Start ngrok
+      uses: luisboto/ngrok-tunnel-action@v0.1.7.2
+      with:
+          timeout: 1h
+          port: 5000
+          ngrok_authtoken: ${{ secrets.NGROK_AUTHTOKEN }}
+          tunnel_type: http
+    
+    - name: Install jq
+      run: sudo apt-get install jq
+    - name: Get ngrok URL
       run: |
-        ngrok http 8080
-      env:
-        NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+        echo "NGROK_URL=$(curl -s http://localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url')" >> $GITHUB_ENV
+
+    - name: Print ngrok URL
+      run: echo "${{ env.NGROK_URL }}"
