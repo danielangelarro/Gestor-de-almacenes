@@ -42,6 +42,7 @@ jobs:
     
     - name: Build
       run: dotnet build --no-restore
+      working-directory: ./src/Api/
 
     - name: Run database migrations
       run: |
@@ -91,7 +92,7 @@ jobs:
             sleep 1
             current=$(date +%s)
             elapsed=$((current - start))
-            if ((elapsed > 300)); then
+            if ((elapsed > 600)); then
               break
             fi
           done
