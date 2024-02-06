@@ -25,7 +25,7 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<GestorDeAl
             .Build();
         var builder = new DbContextOptionsBuilder<GestorDeAlmacenesDBContext>();
         var connectionString = configuration.GetConnectionString("DefaultConnection");
-        builder.UseNpgsql(connectionString);
+        builder.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 21)));
         return new GestorDeAlmacenesDBContext(builder.Options);
     }
 }
@@ -40,7 +40,8 @@ public static class DependencyInjection
         services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
 
         services.AddDbContext<GestorDeAlmacenesDBContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"),
+            options.UseMySql(configuration.GetConnectionString("DefaultConnection"),
+                new MySqlServerVersion(new Version(8, 0, 21)),
                 x => x.MigrationsAssembly("GestorDeAlmacenes.API")
             )
         );
