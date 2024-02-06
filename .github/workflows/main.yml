@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 2880
     services:
       postgres:
         image: postgres:latest
@@ -53,11 +54,12 @@ jobs:
       #   working-directory: ./src/Api/src/GestorDeAlmacenes.Infrastructure
           
       - name: Run Vue.js app
-        run: npm run serve -- --port 8080
+        run: npm run serve -- --port 8080 &
         working-directory: ./src/App/gestoralmacen
   
       - name: Start .NET API
-        run: dotnet run --project src/Api/src/GestorDeAlmacenes.API/GestorDeAlmacenes.API.csproj --urls "http://0.0.0.0:5000"
+        run: dotnet run --project ./GestorDeAlmacenes.API/ --urls "http://0.0.0.0:5000" &
+        working-directory: ./src/Api/src
 
       - name: Install Ngrok
         run: |
