@@ -44,7 +44,7 @@ jobs:
       run: |
         dotnet ef migrations add Production${{ github.sha }} --context GestorDeAlmacenesDBContext --output-dir Migrations/SqliteMigrations
         dotnet ef database update
-      working-directory: ./ruta/de/tu/api
+      working-directory: ./src/Api/src/GestorDeAlmacenes.Infrastructure
 
     - name: Run API
       run: |
