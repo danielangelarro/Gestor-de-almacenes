@@ -84,18 +84,18 @@ jobs:
       - name: Print ngrok URL
         run: echo "${{ env.NGROK_URL }}"
       
-      - name: Loop 
-        run: |
-            start=$(date +%s)
-            while : ; do
-              echo "Running..."
-              sleep 1
-              current=$(date +%s)
-              elapsed=$((current - start))
-              if ((elapsed > 172800)); then
-                break
-              fi
-            done
+      # - name: Loop 
+      #   run: |
+      #       start=$(date +%s)
+      #       while : ; do
+      #         echo "Running..."
+      #         sleep 1
+      #         current=$(date +%s)
+      #         elapsed=$((current - start))
+      #         if ((elapsed > 172800)); then
+      #           break
+      #         fi
+      #       done
 
 # name: Deploy with Ngrok
 
