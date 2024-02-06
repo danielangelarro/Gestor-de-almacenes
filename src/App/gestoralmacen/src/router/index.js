@@ -142,6 +142,7 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
   linkActiveClass: "active",
+  base: '/Gestor-de-almacenes'
 });
 
 router.beforeEach((to, from, next) => {
