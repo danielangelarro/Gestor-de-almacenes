@@ -16,7 +16,7 @@ jobs:
           POSTGRES_PASSWORD: admin
           POSTGRES_DB: testdb
         ports:
-          - 5432:5432
+          - 2024:2024
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - name: Checkout code
@@ -33,7 +33,7 @@ jobs:
           dotnet build src/Api/GestorDeAlmacenes.sln
 
       - name: Start Postgres
-        run: docker run --name postgres_local -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=testdb -d postgres
+        run: docker run --name postgres_local -p 2024:2024 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=testdb -d postgres
 
       - name: Install Node.js
         uses: actions/setup-node@v2
