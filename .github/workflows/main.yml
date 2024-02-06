@@ -54,10 +54,16 @@ jobs:
           npm run build
           
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.ACTION_GITHUB_TOKEN }}
-          publish_dir: ./dist
+        run: |
+          git config --global user.email "68783745+danielangelarro@users.noreply.github.com"
+          git config --global user.name "Daniel Ángel"
+          git checkout -B gh-pages
+          git add -f dist
+          git commit -m "Deploying to gh-pages"
+          git push -f origin gh-pages
+        env:
+          GIT_SSH_COMMAND: 'ssh -o StrictHostKeyChecking=no'
+          GITHUB_TOKEN: ${{ secrets.ACTION_GITHUB_TOKEN }}
   
       - name: Start .NET API
         run: dotnet run --project ./GestorDeAlmacenes.API/ --urls "http://localhost:5000" &
@@ -73,7 +79,7 @@ jobs:
         uses: luisboto/ngrok-tunnel-action@v0.1.7.2
         with:
             timeout: 48h
-            port: 8080
+            port: 5000
             ngrok_authtoken: ${{ secrets.NGROK_AUTH_TOKEN }}
             tunnel_type: http
       
