@@ -12,6 +12,8 @@ services:
         depends_on:
             postgres:
                 condition: service_healthy
+        volumes:
+          - ./certificate.crt:/app/certificate.crt
     postgres:
         container_name: postgres
         image: postgres:15-alpine
