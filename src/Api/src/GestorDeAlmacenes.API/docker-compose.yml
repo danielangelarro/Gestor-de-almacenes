@@ -1,17 +1,6 @@
 version: '3.8'
 name: product-crud
 services:
-    backend:
-        build: ./src/Api
-        image: dukagin/backend:dev
-        depends_on:
-          - db
-    frontend:
-        build: ./src/App/gestoralmacen
-        image: dukagin/frontend:dev
-        depends_on:
-          - backend
-
     api:
         container_name: product-api
         image: products-crud-api:latest
