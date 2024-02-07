@@ -25,7 +25,7 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<GestorDeAl
             .Build();
         var builder = new DbContextOptionsBuilder<GestorDeAlmacenesDBContext>();
         var connectionString = configuration.GetConnectionString("DefaultConnection");
-        builder.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 21)));
+        builder.UseNpgsql(connectionString);
         return new GestorDeAlmacenesDBContext(builder.Options);
     }
 }
@@ -40,8 +40,7 @@ public static class DependencyInjection
         services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
 
         services.AddDbContext<GestorDeAlmacenesDBContext>(options =>
-            options.UseMySql(configuration.GetConnectionString("DefaultConnection"),
-                new MySqlServerVersion(new Version(8, 0, 21)),
+            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"),
                 x => x.MigrationsAssembly("GestorDeAlmacenes.API")
             )
         );
@@ -65,8 +64,6 @@ public static class DependencyInjection
         services.AddScoped<INotificacionRepository, NotificacionRepository>();
 
         services.AddScoped<IGetCurrentUserLoginService, GetCurrentUserLoginService>();
-
-        services.AddHostedService<CheckedCaduceDateProductService>();
 
         Task.Run(
             () => InitializeDatabase(services.BuildServiceProvider().GetRequiredService<GestorDeAlmacenesDBContext>())
